@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Visualization of NPM dependencies</title>
+  </head>
+
+  <body xmlns:n='require:./lib/navbar/navbar'
+        xmlns:s='require:./lib/sidebar/sidebar'
+        xmlns:e='require:./lib/events'>
+
+    <n:navbar></n:navbar>
+    <s:sidebar></s:sidebar>
+
+    <e:event when='navbar:selectedPackage'
+             do='sidebar:showdetails'>
+    </e:event>
+
+    <script type="text/javascript" charset="utf-8" src='bundle.js'></script>
+  </body>
+</html>
