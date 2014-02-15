@@ -1,3 +1,4 @@
-function showDependencies(packageName) {
-  alert('hello')
-}
+module.exports.init = function () {
+  angular.module('npmviz', []);
+  angular.bootstrap(document, ['npmviz']);
+};

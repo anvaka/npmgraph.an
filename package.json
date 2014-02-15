@@ -20,7 +20,7 @@
     "url": "https://github.com/anvaka/npmgraph.sj"
   },
   "devDependencies": {
-    "sj": "0.0.6",
+    "sj": "~0.0",
     "brfs": "~0.1.0"
   }
 }

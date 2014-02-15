@@ -1,21 +1,41 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Visualization of NPM dependencies</title>
+    <link rel="stylesheet" href="external/styles/bootstrap.min.css">
+    <link rel="stylesheet" href="external/styles/bootstrap-theme.min.css">
   </head>
 
-  <body xmlns:n='require:./lib/navbar/navbar'
-        xmlns:s='require:./lib/sidebar/sidebar'
-        xmlns:e='require:./lib/events'>
+  <body>
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Yasiv <small>- npm visualization</small></a>
+      </div>
 
-    <n:navbar></n:navbar>
-    <s:sidebar></s:sidebar>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="row">
+          <div class="col-md-4">
+            <form class="navbar-form navbar-left " role="search">
+              <div class="input-group">
+                <span class="input-group-addon">npm search</span>
+                <input type="text" autofocus class="form-control" placeholder="package name">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">Go!</button>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
 
-    <e:event when='navbar:selectedPackage'
-             do='sidebar:showdetails'>
-    </e:event>
-
-    <script type="text/javascript" charset="utf-8" src='bundle.js'></script>
+  <span xmlns:sj='require:./main.js'><sj:init></sj:init></span>
+  <script type="text/javascript" charset="utf-8" src='external/angular.min.js'></script>
+  <script type="text/javascript" charset="utf-8" src='bundle.js'></script>
   </body>
 </html>
