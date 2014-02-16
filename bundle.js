@@ -1,12 +1,27 @@
-require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"W3x+zM":[function(require,module,exports){
+require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var fs = require('fs');
+
+module.exports = function () {
+  return {
+    restrict: 'E',
+    scope: {},
+    template : "<nav class=\"navbar navbar-default\" role=\"navigation\">\n  <div class=\"container-fluid\">\n    <div class=\"navbar-header\">\n      <a class=\"navbar-brand\" href=\"#\">Yasiv <small>- npm visualization</small></a>\n    </div>\n\n    <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">\n      <div class=\"row\">\n        <div class=\"col-md-4\">\n          <form class=\"navbar-form navbar-left\" role=\"search\">\n            <div class=\"input-group\">\n              <span class=\"input-group-addon\">npm {{hello}} search</span>\n              <input type=\"text\" autofocus class=\"form-control\" placeholder=\"package name\">\n              <span class=\"input-group-btn\">\n                <button class=\"btn btn-default\" type=\"button\">Go!</button>\n              </span>\n            </div>\n          </form>\n        </div>\n      </div>\n    </div>\n  </div>\n</nav>\n",
+    link: function (scope) {
+    }
+  };
+};
+
+},{"fs":6}],"W3x+zM":[function(require,module,exports){
 module.exports.init = function () {
-  angular.module('npmviz', []);
+  var module = angular.module('npmviz', []);
+
+  module.directive('navbar', require('./lib/navbar/index.js'));
   angular.bootstrap(document, ['npmviz']);
 };
 
-},{}],"./main.js":[function(require,module,exports){
+},{"./lib/navbar/index.js":1}],"./main.js":[function(require,module,exports){
 module.exports=require('W3x+zM');
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var sj = require('../');
 var docLoaded = setInterval(checkDomReady);
 
@@ -18,7 +33,7 @@ function checkDomReady() {
   }
 }
 
-},{"../":4}],4:[function(require,module,exports){
+},{"../":5}],5:[function(require,module,exports){
 module.exports.bind = function(root, model, requires) {
   requires = requires || {};
   model = model || {};
@@ -82,4 +97,6 @@ module.exports.bind = function(root, model, requires) {
   }
 };
 
-},{}]},{},[3])
+},{}],6:[function(require,module,exports){
+
+},{}]},{},[4])

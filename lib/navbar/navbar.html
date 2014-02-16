@@ -1,16 +1,23 @@
-<div class="navbar">
-  <div class="navbar-inner">
-    <a class="brand" href="#">Yasiv <small>- npm visualization</small></a> 
-    <form class="navbar-form pull-left" >
-      <div class="input-prepend input-append">
-        <span class="add-on">npm search</span>
-        <input class="span3"
-               id="npmSearchPackageName"
-               type="text"
-               autocomplete="off"
-               placeholder="package name">
-        <button type="submit" class="btn btn-primary">Go</button>
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Yasiv <small>- npm visualization</small></a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <div class="row">
+        <div class="col-md-4">
+          <form class="navbar-form navbar-left" role="search">
+            <div class="input-group">
+              <span class="input-group-addon">npm {{hello}} search</span>
+              <input type="text" autofocus class="form-control" placeholder="package name">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button">Go!</button>
+              </span>
+            </div>
+          </form>
+        </div>
       </div>
-    </form>
+    </div>
   </div>
-</div>
+</nav>
