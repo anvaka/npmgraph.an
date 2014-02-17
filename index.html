@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="external/styles/bootstrap-theme.min.css">
   </head>
 
-  <body>
-    <navbar></navbar>
-    <span xmlns:sj='require:./main.js'><sj:init></sj:init></span>
+  <body sj-app='npmviz'>
+    <navbar require='./lib/navbar/index.js'></navbar>
+
     <script type="text/javascript" charset="utf-8" src='external/angular.js'></script>
     <script type="text/javascript" charset="utf-8" src='bundle.js'></script>
   </body>
