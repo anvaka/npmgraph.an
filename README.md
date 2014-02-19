@@ -1,14 +1,6 @@
 # npmgraph.sj
 
-Experiment: how npmgraph could be implemented in declarative way?
-
-# install
-
-With [npm](https://npmjs.org) do:
-
-```
-npm install npmgraph.sj
-```
+Experiment: how npmgraph can be implemented with angular, npm, browserify and [an](https://github.com/anvaka/an).
 
 # license
 
