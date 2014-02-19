@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default" role="navigation" ng-controller='navbarController'>
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">Yasiv <small>- npm visualization</small></a>
@@ -10,7 +10,10 @@
           <form class="navbar-form navbar-left" role="search">
             <div class="input-group">
               <span class="input-group-addon">npm {{hello}} search</span>
-              <input  type="text" autofocus class="form-control" placeholder="package name" autosuggest>
+              <input  type="text" autofocus
+                      ng-model='selectedPackage'
+                      typeahead="pkg for pkg in getPackages($viewValue)"
+                      class="form-control" placeholder="package name">
               <span class="input-group-btn">
                 <button class="btn btn-default" type="button">Go!</button>
               </span>
