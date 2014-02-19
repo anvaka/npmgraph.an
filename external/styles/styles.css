@@ -1,0 +1,8 @@
+.typeahead-container ul {
+  width: 300px;
+  overflow: hidden;
+}
+
+.typeahead-container ul>li>a {
+  white-space: normal;
+}

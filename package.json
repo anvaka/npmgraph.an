@@ -28,6 +28,6 @@
   },
   "dependencies": {
     "an": "~0.0.0",
-    "typeahead.an": "0.0.1"
+    "typeahead.an": "~0.0.1"
   }
 }
