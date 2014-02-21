@@ -9,11 +9,12 @@
         <div class="col-md-4">
           <form class="navbar-form navbar-left" role="search">
             <div class="input-group typeahead-container">
-              <span class="input-group-addon">npm {{hello}} search</span>
+              <span class="input-group-addon">npm search</span>
               <input  type="text" autofocus
                       ng-model='selectedPackage'
                       typeahead="pkg for pkg in getPackages($viewValue)"
                       typeahead-input-formatter="formatPkg($model)"
+                      typeahead-on-select='onPackageSelected($model)'
                       typeahead-template-url="packageMatch.html"
                       class="form-control" placeholder="package name">
                 <script type="text/ng-template" id="packageMatch.html">

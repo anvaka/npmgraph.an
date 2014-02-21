@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="external/styles/styles.css">
   </head>
 
-  <body>
-    <navbar></navbar>
+  <body ng-controller='mainController'>
+    <navbar on-package-selected="onPackageSelected"></navbar>
 
     <script type="text/javascript" charset="utf-8" src='external/angular.js'></script>
     <script type="text/javascript" charset="utf-8" src='bundle.js'></script>
