@@ -1,6 +1,5 @@
 // we need this to use navbar directive
-require('./lib/navbar');
-require('./lib/mainController');
+require('./lib/navbar/navbar');
 
 // bootstrap angular application:
 npmVizApp = angular.module('npmViz', ['ngRoute']);

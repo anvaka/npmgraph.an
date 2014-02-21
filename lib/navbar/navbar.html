@@ -14,13 +14,13 @@
                       ng-model='selectedPackage'
                       typeahead="pkg for pkg in getPackages($viewValue)"
                       typeahead-input-formatter="formatPkg($model)"
-                      typeahead-on-select='onPackageSelected($model)'
+                      typeahead-on-select='viewPackage($model)'
                       typeahead-template-url="packageMatch.html"
                       class="form-control" placeholder="package name">
                 <script type="text/ng-template" id="packageMatch.html">
                   <a>
-                    <strong>{{match.model.name}}</strong>
-                    <small>{{match.model.description}}</small>
+                    <strong>{{match.model.id}}</strong>
+                    <small>{{match.model.value.description}}</small>
                   </a>
                 </script>
               <span class="input-group-btn">
