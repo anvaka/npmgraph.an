@@ -12,8 +12,10 @@
 
   <body ng-controller='mainController'>
     <navbar on-package-selected="onPackageSelected"></navbar>
+    <div ng-view></div>
 
     <script type="text/javascript" charset="utf-8" src='external/angular.js'></script>
+    <script type="text/javascript" charset="utf-8" src='external/angular-route.js'></script>
     <script type="text/javascript" charset="utf-8" src='bundle.js'></script>
   </body>
 </html>
