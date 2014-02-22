@@ -6,3 +6,24 @@
 .typeahead-container ul>li>a {
   white-space: normal;
 }
+
+navbar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+body, .full {
+  width: 100%;
+  height: 100%;
+}
+
+.graphView {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+body {
+  position: absolute;
+  overflow: hidden;
+}
