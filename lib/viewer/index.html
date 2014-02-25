@@ -1,14 +1,9 @@
 <graph-viewer source='graph'>
-  <layers>
-    <layer name='links'></layer>
-    <layer name='nodes'></layer>
-    <layer name='labels'></layer>
-  </layers>
   <node>
-    <rect id='{{id}}' width='10px' height='10px' layer='nodes'></rect>
-    <text layer='labels' y='-5'>{{id}}</text>
+    <rect id='{{id}}' width='10px' height='10px'></rect>
+    <text y='-5'>{{id}}</text>
   </node>
   <edge>
-    <arrow from='{{fromId}}' to='{{toId}}' layer='links'></arrow>
+    <arrow from='{{fromId}}' to='{{toId}}'></arrow>
   </edge>
 </graph-viewer>
