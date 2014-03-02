@@ -1,11 +1,20 @@
-<graph-viewer source='graph'>
+<graph-viewer source='graph' node-selected='selected'>
   <edge>
   <arrow stroke='#D3D3D3'
          from='{{pos.from}}'
          to='{{pos.to}}'></arrow>
   </edge>
-  <node>
+  <node >
     <rect x='-5' y='-5' fill='#00BFFF' width='10px' height='10px'></rect>
     <text fill='gray' y='-10' x='-5'>{{id}}</text>
   </node>
 </graph-viewer>
+
+<div class='packageInfo' ng-show='selectedPackage'>
+  <a ng-href='https://npmjs.org/package/{{selectedPackage.name}}'>{{selectedPackage.name}}</a>
+  <hr class='divider'>
+  <p class='description'>
+    {{selectedPackage.description}}
+  </p>
+  <pre class="sh sh_sourceCode"><code>npm install {{selectedPackage.name}}</code></pre>
+</div>
