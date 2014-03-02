@@ -31,6 +31,6 @@
     "typeahead.an": "~0.0.1",
     "ngraph.graph": "0.0.2",
     "npmgraphbuilder": "0.0.1",
-    "ngraph.fabric": "0.0.1"
+    "ngraph.three": "0.0.1"
   }
 }

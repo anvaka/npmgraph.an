@@ -72,6 +72,12 @@ body,
   box-shadow: none;
 }
 
+.switchMode {
+  position: absolute;
+  bottom: 15px;
+  left: 30px;
+}
+
 body {
   position: absolute;
   overflow: hidden;

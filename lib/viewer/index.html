@@ -1,4 +1,4 @@
-<graph-viewer source='graph' node-selected='selected'>
+<graph-viewer source='graph' node-selected='onNodeSelected' mode='mode'>
   <edge>
   <arrow stroke='#D3D3D3'
          from='{{pos.from}}'
@@ -17,4 +17,8 @@
     {{selectedPackage.description}}
   </p>
   <pre class="sh sh_sourceCode"><code>npm install {{selectedPackage.name}}</code></pre>
+</div>
+
+<div class='switchMode' ng-show='canSwitchMode'>
+  <button class="btn btn-xs btn-danger" ng-click="switchMode()" type="button">Show {{alternateMode}}</button>
 </div>
