@@ -18,11 +18,17 @@ navbar {
   width: 400px;
   margin: 15px 15px 15px 30px;
 }
+
+.typeahead-container {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3),0 4px 15px -5px rgba(0, 0, 0, 0);
+  border-radius: 4px;
+}
+
 div.packageInfo {
   width: 350px;
   position: absolute;
-  top: 55px;
-  left: 30px;
+  top: 52px;
+  left: 31px;
   padding: 11px 13px;
   background-color: white;
   border-radius: 2px;
