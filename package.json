@@ -4,7 +4,7 @@
   "description": "Experiment: how npmgraph could be implemented in declarative way?",
   "main": "main.js",
   "scripts": {
-    "start": "browserify index.js > bundle.js",
+    "start": "beefy index.js:bundle.js 9001",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "browserify": {
@@ -24,7 +24,8 @@
     "url": "https://github.com/anvaka/npmgraph.sj"
   },
   "devDependencies": {
-    "brfs": "~0.1.0"
+    "brfs": "~0.1.0",
+    "beefy": "^1.1.0"
   },
   "dependencies": {
     "an": "~0.0.0",
