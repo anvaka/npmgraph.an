@@ -1,6 +1,6 @@
 {
   "name": "npmgraph.an",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Experiment: how npmgraph could be implemented in declarative way?",
   "main": "main.js",
   "scripts": {
