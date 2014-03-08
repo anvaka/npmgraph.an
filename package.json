@@ -1,6 +1,6 @@
 {
-  "name": "npmgraph.sj",
-  "version": "0.0.0",
+  "name": "npmgraph.an",
+  "version": "0.0.1",
   "description": "Experiment: how npmgraph could be implemented in declarative way?",
   "main": "main.js",
   "scripts": {
@@ -32,6 +32,8 @@
     "typeahead.an": "~0.0.1",
     "ngraph.graph": "0.0.2",
     "npmgraphbuilder": "0.0.1",
-    "ngraph.three": "0.0.1"
+    "ngraph.three": "0.0.3",
+    "ngraph.vivasvg": "0.0.2",
+    "three2stl": "0.0.0"
   }
 }
