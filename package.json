@@ -29,11 +29,12 @@
   },
   "dependencies": {
     "an": "~0.0.0",
-    "typeahead.an": "~0.0.1",
     "ngraph.graph": "0.0.2",
-    "npmgraphbuilder": "0.0.1",
+    "ngraph.svg": "0.0.2",
     "ngraph.three": "0.0.6",
-    "ngraph.vivasvg": "0.0.2",
-    "three2stl": "0.0.1"
+    "npmgraphbuilder": "0.0.1",
+    "simplesvg": "0.0.1",
+    "three2stl": "0.0.1",
+    "typeahead.an": "~0.0.1"
   }
 }
