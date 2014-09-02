@@ -1,5 +1,4 @@
 // we need this to use navbar directive
-debugger;
 require('./navbar/navbar');
 
 // bootstrap angular application:
