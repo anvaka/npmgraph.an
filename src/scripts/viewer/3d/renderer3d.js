@@ -20,21 +20,23 @@ function create3DRenderer(graph, container) {
 
   renderer.createNodeUI(nodeUI).createLinkUI(linkUI);
 
-  var noop = function () {};
+  var noop = function() {};
 
   return {
     run: renderer.run,
     dispose: renderer.dispose,
     layout: renderer.layout,
 
-    exportSTL: function () {
+    exportSTL: function() {
       var three2stl = require('three2stl');
       var layout = renderer.layout;
       var scene = renderer.scene;
 
-      var linkMaterial = new THREE.LineBasicMaterial({ color: 0x5A5D6E });
+      var linkMaterial = new THREE.LineBasicMaterial({
+        color: 0x5A5D6E
+      });
       // todo: this should be configurable
-      graph.forEachNode(function (node) {
+      graph.forEachNode(function(node) {
         var pos = layout.getNodePosition(node.id);
         pos.x *= 0.25;
         pos.y *= 0.25;
@@ -42,16 +44,17 @@ function create3DRenderer(graph, container) {
       });
 
       var lineMaterial = new THREE.LineBasicMaterial({
-            color: 0x222222, linewidth: 0.2 
-        });
-      graph.forEachLink(function (link) {
+        color: 0x222222,
+        linewidth: 0.2
+      });
+      graph.forEachLink(function(link) {
         var pos = layout.getLinkPosition(link.id);
         var path = new THREE.LineCurve3(
-          new THREE.Vector3( pos.from.x, pos.from.y, pos.from.z ),
-          new THREE.Vector3( pos.to.x, pos.to.y, pos.to.z )
+          new THREE.Vector3(pos.from.x, pos.from.y, pos.from.z),
+          new THREE.Vector3(pos.to.x, pos.to.y, pos.to.z)
         );
-        var tubeGeom = new THREE.TubeGeometry( path, 8, 0.5 );
-        var mesh = new THREE.Mesh( tubeGeom, lineMaterial );
+        var tubeGeom = new THREE.TubeGeometry(path, 8, 0.5);
+        var mesh = new THREE.Mesh(tubeGeom, lineMaterial);
         scene.add(mesh);
       });
       renderer.renderOneFrame();
@@ -60,29 +63,29 @@ function create3DRenderer(graph, container) {
     }
   };
 
-function nodeUI(node) {
-  var nodeGeometry = new THREE.SphereGeometry(3);
-  var nodeMaterial = new THREE.MeshPhongMaterial({
-    color: 0xCFCCDF
-  });
-  return new THREE.Mesh(nodeGeometry, nodeMaterial);
+  function nodeUI(node) {
+    var nodeGeometry = new THREE.SphereGeometry(3);
+    var nodeMaterial = new THREE.MeshPhongMaterial({
+      color: 0xCFCCDF
+    });
+    return new THREE.Mesh(nodeGeometry, nodeMaterial);
+  }
+
+  function linkUI(link) {
+    var linkGeometry = new THREE.Geometry();
+    linkGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
+    linkGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
+
+    var linkMaterial = new THREE.LineBasicMaterial({
+      color: 0x5A5D6E
+    });
+    return new THREE.Line(linkGeometry, linkMaterial);
+  }
+
+  function addLights(scene) {
+    var light = new THREE.DirectionalLight(0xffffff);
+    scene.add(light);
+
+    return light;
+  }
 }
-
-function linkUI(link) {
-  var linkGeometry = new THREE.Geometry();
-  linkGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-  linkGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-
-  var linkMaterial = new THREE.LineBasicMaterial({ color: 0x5A5D6E });
-  return new THREE.Line(linkGeometry, linkMaterial);
-}
-
-function addLights(scene) {
-  var light = new THREE.DirectionalLight(0xffffff);
-  scene.add(light);
-
-  return light;
-}
-}
-
-
