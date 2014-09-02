@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "gulp --port 31337",
+    "deploy": "./deploy-travis.sh",
     "test": "echo \"TODO implement me\" && exit 0"
   },
   "browserify": {
