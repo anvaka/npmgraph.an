@@ -1,4 +1,5 @@
 lib-cov
+dist
 *.seed
 *.log
 *.csv

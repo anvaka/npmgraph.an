@@ -4,7 +4,7 @@
   "description": "Experiment: how npmgraph could be implemented in declarative way?",
   "main": "main.js",
   "scripts": {
-    "start": "beefy index.js:bundle.js 9001",
+    "start": "gulp --port 31337",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "browserify": {
@@ -14,21 +14,29 @@
   },
   "keywords": [
     "npm",
-    "ngraph",
-    "sj"
+    "ngraph"
   ],
   "author": "Andrei Kashcha",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/anvaka/npmgraph.sj"
+    "url": "https://github.com/anvaka/npmgraph.an"
   },
   "devDependencies": {
-    "brfs": "~0.1.0",
-    "beefy": "^1.1.0"
+    "brfs": "^1.1.2",
+    "browserify": "^3.33.0",
+    "connect-livereload": "^0.3.2",
+    "express": "^3.5.1",
+    "gulp-concat": "^2.2.0",
+    "gulp-less": "^1.2.3",
+    "gulp-util": "^2.2.14",
+    "tiny-lr": "0.0.5",
+    "yargs": "^1.2.1",
+    "gulp": "^3.8.7"
   },
   "dependencies": {
-    "an": "~0.0.0",
+    "an": "0.0.6",
+    "angular": "^1.2.10",
     "ngraph.events": "0.0.3",
     "ngraph.graph": "0.0.2",
     "ngraph.svg": "0.0.3",
@@ -36,6 +44,7 @@
     "npmgraphbuilder": "0.0.1",
     "simplesvg": "0.0.2",
     "three2stl": "0.0.1",
-    "typeahead.an": "~0.0.1"
+    "typeahead.an": "~0.0.1",
+    "twitter-bootstrap-3.0.0": "^3.0.0"
   }
 }
