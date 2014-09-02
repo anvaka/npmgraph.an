@@ -31,10 +31,10 @@
     "an": "~0.0.0",
     "ngraph.events": "0.0.3",
     "ngraph.graph": "0.0.2",
-    "ngraph.svg": "0.0.2",
+    "ngraph.svg": "0.0.3",
     "ngraph.three": "0.0.6",
     "npmgraphbuilder": "0.0.1",
-    "simplesvg": "0.0.1",
+    "simplesvg": "0.0.2",
     "three2stl": "0.0.1",
     "typeahead.an": "~0.0.1"
   }
