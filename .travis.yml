@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+- '0.10'
+cache:
+  directories:
+    - node_modules
+env:
+  global:
+  - secure: PKjpw4xqYJdJHO05mEdVZphoGEWBVu47bctd7b6fo8M4tMlU0wXsgTF2RX0FSMOo8gIWm6E++baNSFT3u24Cb90XKg8FFgA7kENkhj2LQX1k9vXm3cYicQw2ob8FqQ9YJ5aR4J4Ff3gxEdtwQpZUIsYGN84ZgzYTAQThw/ep3Hg=
+after_success:
+  - npm run-script deploy
