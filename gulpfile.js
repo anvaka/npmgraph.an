@@ -26,16 +26,33 @@ gulp.task('startStaticServer', startStaticServer);
 
 function runBrowserify() {
   produceMainBundle();
+  produce3DBundle();
 }
 
 function produceMainBundle() {
-  var bundle = require('browserify')().add('./src/scripts/index.js');
+  var bundle = require('browserify')()
+    .exclude('renderer3d')
+    .add('./src/scripts/index.js');
+
   bundle
     .bundle()
     .on('error', function (err) {
       gutil.log(gutil.colors.red('Failed to browserify'), gutil.colors.yellow(err.message));
     })
     .pipe(fs.createWriteStream(path.join(__dirname + '/dist/bundle.js')));
+}
+
+function produce3DBundle() {
+  var bundle = require('browserify')()
+    .require('./src/scripts/viewer/3d/renderer3d.js', { expose: 'renderer3d' });
+
+  bundle
+    .bundle()
+    .on('error', function (err) {
+      gutil.log(gutil.colors.red('Failed to browserify render3d'), gutil.colors.yellow(err.message));
+    })
+    .pipe(fs.createWriteStream(path.join(__dirname + '/dist/renderer3d.js')));
+
 }
 
 function compileLess() {
