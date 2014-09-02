@@ -11,7 +11,7 @@ module.exports = function ($scope, $routeParams, $http, $location) {
     $location.path('view/3d/' + $routeParams.pkgId);
   };
 
-  var graphBuilder = require('../graphBuilder')($routeParams.pkgId, $routeParams.fake, $http);
+  var graphBuilder = require('../graphBuilder')($routeParams.pkgId, $http);
   $scope.graph = graphBuilder.graph;
   graphBuilder.start.then(function () {
     // todo: check if it supports webgl

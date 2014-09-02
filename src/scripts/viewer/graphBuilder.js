@@ -3,18 +3,13 @@
  */
 var createGraphBuilder = require('npmgraphbuilder');
 
-module.exports = function (pkgName, useFakeData, http) {
+module.exports = function (pkgName, http) {
   var graph = require('ngraph.graph')();
 
-  var graphBuilder;
-  if (useFakeData) {
-    graphBuilder = require('./offline/graphBuilder');
-  } else {
-    graphBuilder = createGraphBuilder(function (url, data) {
-      data.callback = 'JSON_CALLBACK';
-      return http.jsonp(url, {params: data});
-    });
-  }
+  var graphBuilder = createGraphBuilder(function (url, data) {
+    data.callback = 'JSON_CALLBACK';
+    return http.jsonp(url, {params: data});
+  });
 
   graph.on('changed', pinRootNode);
 

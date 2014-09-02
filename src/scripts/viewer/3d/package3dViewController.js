@@ -7,7 +7,7 @@ module.exports = function($scope, $routeParams, $http, $location) {
 
   $scope.exportModel = function() {};
 
-  var graphBuilder = require('../graphBuilder')($routeParams.pkgId, $routeParams.fake, $http);
+  var graphBuilder = require('../graphBuilder')($routeParams.pkgId, $http);
   graphBuilder.start.then(function() {
     // todo: check if it supports webgl
     if (!$scope.$$phase) {
