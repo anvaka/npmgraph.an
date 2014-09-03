@@ -2,6 +2,7 @@
 rm -rf dist || exit 0;
 mkdir dist;
 gulp build
+cp CNAME ./dist
 ( cd dist
  git init
  git config user.name "anvaka"
