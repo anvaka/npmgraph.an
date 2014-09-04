@@ -23,6 +23,8 @@ module.exports = function ($scope, $routeParams, $http, $location) {
   });
 
   function selectPackage(node) {
-    $scope.$apply(function () { $scope.selectedPackage = node.data; });
+    $scope.$apply(function () {
+      $scope.selectedPackage = node.data;
+    });
   }
 };
