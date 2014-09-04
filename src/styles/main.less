@@ -39,14 +39,13 @@ div.packageInfo {
   top: 52px;
   left: 31px;
   padding: 11px 0;
+  color: @primary-color;
 
   a {
     color: #52CCE3;
     font-size: 18px;
   }
-  p {
-    color: @primary-color;
-  }
+
   hr {
     display: block; height: 1px;
     border: 0; border-top: 1px solid #5B5E6F;
@@ -62,6 +61,12 @@ div.packageInfo {
     color: @secondary-color;
     float: right;
   }
+
+  .maintainerBox {
+    float: left;
+    margin-right: 4px;
+  }
+
   ::-moz-selection { /* Code for Firefox */
       color: red;
       background: yellow;

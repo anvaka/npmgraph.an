@@ -19,6 +19,12 @@
     {{selectedPackage.description}}
   </p>
   <pre class="sh sh_sourceCode"><code>npm install {{selectedPackage.name}}</code></pre>
+  <div class='maintainers'>
+    <div>Maintainers</div>
+    <div ng-repeat="maintainer in maintainers" class='maintainerBox'>
+        <img ng-src="{{maintainer.avatar}}" />
+    </div>
+  </div>
 </div>
 
 <div class='switchMode' ng-show='canSwitchMode'>
