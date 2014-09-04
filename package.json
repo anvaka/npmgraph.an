@@ -40,7 +40,7 @@
     "angular": "^1.2.10",
     "ngraph.events": "0.0.3",
     "ngraph.graph": "0.0.2",
-    "ngraph.svg": "0.0.4",
+    "ngraph.svg": "0.0.5",
     "ngraph.three": "0.0.9",
     "npmgraphbuilder": "0.0.1",
     "simplesvg": "0.0.2",
