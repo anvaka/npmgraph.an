@@ -13,11 +13,11 @@ function graphViewer() {
       'mode': '='
     },
 
-    compile: function (tElement, tAttrs, transclude) {
+    compile: function(tElement, tAttrs, transclude) {
       var content = transclude(tElement.scope());
       var nodeTemplate, linkTemplate;
 
-      angular.forEach(content, function (el) {
+      angular.forEach(content, function(el) {
         var name = el.localName;
         if (name === 'node') {
           nodeTemplate = el.innerHTML;
@@ -36,11 +36,12 @@ function graphViewer() {
 
         function createRenderer() {
           var renderer = require('ngraph.svg')(graph, {
-              container: element[0],
-              physics: require('../physics')()
-            });
+            container: element[0],
+            physics: require('../physics')()
+          });
+          var rootNode = graph.getNode(scope.root);
 
-          renderer.layout.pinNode(graph.getNode(scope.root), true);
+          renderer.layout.pinNode(rootNode, true);
 
           var graphUI = require('./graphUI')(renderer.svgRoot);
 
@@ -48,22 +49,27 @@ function graphViewer() {
           renderer.link(graphUI.link).placeLink(graphUI.placeLink);
 
           graphUI.on('nodeselected', scope.nodeSelected);
-          graphUI.on('mouseenter', function (node) {
+          graphUI.on('mouseenter', higlightNode);
+
+          renderer.run();
+
+          higlightNode(rootNode);
+
+          return renderer;
+
+          function higlightNode(node) {
             graph.forEachNode(graphUI.resetHighlight);
 
             graphUI.resetLinks();
             graphUI.highlight(node.id, '#E0DE0F', '#E0DE0F');
             scope.nodeSelected(node);
 
-            graph.forEachLinkedNode(node.id, function (other, link) {
+            graph.forEachLinkedNode(node.id, function(other, link) {
               var color = other.id === link.toId ? '#52CCE3' : '#DC5F65';
               graphUI.highlight(other.id, color);
               graphUI.highlightLink(link.id, color);
             });
-          });
-
-          renderer.run();
-          return renderer;
+          }
         }
       }
     }
