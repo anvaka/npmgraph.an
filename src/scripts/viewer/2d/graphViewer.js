@@ -53,6 +53,7 @@ function graphViewer() {
 
             graphUI.resetLinks();
             graphUI.highlight(node.id, '#E0DE0F', '#E0DE0F');
+            scope.nodeSelected(node);
 
             graph.forEachLinkedNode(node.id, function (other, link) {
               var color = other.id === link.toId ? '#52CCE3' : '#DC5F65';
