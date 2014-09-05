@@ -22,7 +22,9 @@
   <div class='maintainers'>
     <div>Maintainers</div>
     <div ng-repeat="maintainer in maintainers" class='maintainerBox'>
+      <a href="#" ng-href='{{maintainer.profile}}' target="_blank">
         <img ng-src="{{maintainer.avatar}}" />
+      </a>
     </div>
   </div>
 </div>

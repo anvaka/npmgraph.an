@@ -51,6 +51,7 @@ module.exports = function($scope, $routeParams, $http, $location) {
   function toGravatar(record) {
     return {
       avatar:'https://secure.gravatar.com/avatar/' + md5(record.email) + '?s=25&d=retro',
+      profile: 'https://www.npmjs.org/~' + record.name,
       name: record.name,
       email: record.email
     };
