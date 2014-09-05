@@ -26,6 +26,8 @@ module.exports = function($scope, $routeParams, $http, $location) {
   function setCanSwitch() {
     // todo: check if it supports webgl
     $scope.canSwitchMode = true;
+    $scope.linksCount = $scope.graph.getLinksCount();
+    $scope.nodesCount = $scope.graph.getNodesCount();
   }
 
   function applyToScope(cb) {

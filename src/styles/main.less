@@ -42,13 +42,13 @@ div.packageInfo {
   color: @primary-color;
 
   a {
-    color: #52CCE3;
+    color: @acent-color;
     font-size: 18px;
   }
 
   hr {
     display: block; height: 1px;
-    border: 0; border-top: 1px solid #5B5E6F;
+    border: 0; border-top: 1px solid @border-color;
     margin: 1em 0; padding: 0;
   }
   pre {
@@ -65,6 +65,19 @@ div.packageInfo {
   .maintainerBox {
     float: left;
     margin-right: 4px;
+  }
+
+  .nodes {
+    float: left;
+    width: 50%;
+    border-right: 1px solid @border-color;
+    margin-right: 9px;
+  }
+
+  .number {
+    font-size: 28px;
+    line-height: 24px;
+    color: @acent-color;
   }
 
   ::-moz-selection { /* Code for Firefox */
