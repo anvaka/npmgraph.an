@@ -65,6 +65,14 @@ div.packageInfo {
   .maintainerBox {
     float: left;
     margin-right: 4px;
+    position: relative;
+    overflow: visible;
+    margin-left: -25px;
+    width: 50px;
+  }
+
+  .maintainersContainer {
+    margin-left: 25px;
   }
 
   .nodes {
@@ -79,7 +87,14 @@ div.packageInfo {
     line-height: 24px;
     color: @acent-color;
   }
-
+.packagesCount {
+top: 0;
+right: 0;
+font-size: 24px;
+position: absolute;
+z-index: 1;
+display: none;
+}
   ::-moz-selection { /* Code for Firefox */
       color: red;
       background: yellow;

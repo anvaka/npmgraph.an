@@ -21,10 +21,12 @@
   <pre class="sh sh_sourceCode"><code>npm install {{selectedPackage.name}}</code></pre>
   <div class='maintainers'>
     <div>maintainers</div>
-    <div ng-repeat="maintainer in maintainers" class='maintainerBox'>
-      <a href="#" ng-href='{{maintainer.profile}}' target="_blank">
-        <img ng-src="{{maintainer.avatar}}" />
-      </a>
+    <div class='maintainersContainer'>
+      <div ng-repeat="maintainer in maintainers" class='maintainerBox'>
+        <a href="#" ng-href='{{maintainer.profile}}' target="_blank">
+          <img ng-src="{{maintainer.avatar}}" />
+        </a>
+      </div>
     </div>
     <div class='clearfix'></div>
   </div>
@@ -38,6 +40,22 @@
       <p>links total</p>
       <p class='number'>{{linksCount}}</p>
     </div>
+    <div class="clearfix"></div>
+    <hr>
+  <div class='all-authors'>
+    <div>all authors</div>
+    <div class='maintainersContainer'>
+      <div ng-repeat="author in authors" class='maintainerBox'>
+        <a href="#" ng-href='{{author.profile}}' target="_blank">
+          <img ng-src="{{author.avatar}}" />
+        </a>
+        <span class='packagesCount'>
+          x {{author.count}}
+        </span>
+      </div>
+    </div>
+    <div class='clearfix'></div>
+  </div>
   </div>
 </div>
 

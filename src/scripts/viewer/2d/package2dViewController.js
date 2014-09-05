@@ -28,6 +28,8 @@ module.exports = function($scope, $routeParams, $http, $location) {
     $scope.canSwitchMode = true;
     $scope.linksCount = $scope.graph.getLinksCount();
     $scope.nodesCount = $scope.graph.getNodesCount();
+
+    $scope.authors = getAllAuthors($scope.graph);
   }
 
   function applyToScope(cb) {
@@ -57,5 +59,27 @@ module.exports = function($scope, $routeParams, $http, $location) {
       name: record.name,
       email: record.email
     };
+  }
+
+  function getAllAuthors(graph) {
+    var histogram = {};
+    var authors = [];
+    graph.forEachNode(function (node) {
+      var data = node.data;
+      data.maintainers.forEach(function (maintainer) {
+        var record = histogram[maintainer.email];
+        if (!record) {
+          record = histogram[maintainer.email] = toGravatar(maintainer);
+          record.count = 0;
+          record.packages = [];
+
+          authors.push(record);
+        }
+        record.count += 1;
+        record.packages.push(node.id);
+      });
+    });
+
+    return authors.sort(function (x, y) { return y.count - x.count; });
   }
 };
