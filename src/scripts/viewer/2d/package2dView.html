@@ -45,11 +45,14 @@
   <div class='all-authors'>
     <div>all authors</div>
     <div class='maintainersContainer'>
-      <div ng-repeat="author in authors" class='maintainerBox'>
+      <div ng-repeat="author in authors" class='maintainerBox'
+          >
         <a href="#" ng-href='{{author.profile}}' target="_blank">
-          <img ng-src="{{author.avatar}}" />
+          <img ng-src="{{author.avatar}}" 
+            ng-mouseenter='author.countVisible = true'
+            ng-mouseleave='author.countVisible = false'/>
         </a>
-        <span class='packagesCount'>
+        <span class='packagesCount' ng-show='author.countVisible'>
           x {{author.count}}
         </span>
       </div>
