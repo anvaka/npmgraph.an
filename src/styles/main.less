@@ -8,13 +8,30 @@ navbar {
   z-index: 1;
 }
 
-.typeahead-container ul {
-  width: 288px;
-  overflow: hidden;
-}
-
-.typeahead-container ul>li>a {
-  white-space: normal;
+.typeahead-container {
+  ul {
+    width: 288px;
+    overflow: hidden;
+    left: 0;
+    border: 0;
+    background-color: @scene-background;
+    border-radius: 0;
+    box-shadow: none;
+    li {
+      a {
+        white-space: normal;
+        color: #CFCCDF;
+        padding: 3px 12px;
+        cursor: pointer;
+      }
+      &.active {
+        a, a:hover, a:focus {
+          background-color: transparent;
+          color: #E0DE0F;
+        }
+      }
+    }
+  }
 }
 
 .search {
