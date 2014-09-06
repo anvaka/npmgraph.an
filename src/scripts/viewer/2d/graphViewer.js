@@ -65,7 +65,7 @@ function graphViewer() {
             scope.nodeSelected(node);
 
             graph.forEachLinkedNode(node.id, function(other, link) {
-              var color = other.id === link.toId ? '#52CCE3' : '#DC5F65';
+              var color = '#CFCCDF';
               graphUI.highlight(other.id, color);
               graphUI.highlightLink(link.id, color);
             });
