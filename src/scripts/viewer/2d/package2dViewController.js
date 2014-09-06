@@ -35,7 +35,7 @@ module.exports = function($scope, $routeParams, $http, $location) {
     $scope.linksCount = $scope.graph.getLinksCount();
     $scope.nodesCount = $scope.graph.getNodesCount();
 
-    $scope.authors = getAllAuthors($scope.graph);
+    $scope.allMaintainers = getAllMaintainers($scope.graph);
   }
 
   function applyToScope(cb) {
@@ -67,9 +67,9 @@ module.exports = function($scope, $routeParams, $http, $location) {
     };
   }
 
-  function getAllAuthors(graph) {
+  function getAllMaintainers(graph) {
     var histogram = {};
-    var authors = [];
+    var maintainers = [];
     graph.forEachNode(function (node) {
       var data = node.data;
       data.maintainers.forEach(function (maintainer) {
@@ -79,13 +79,13 @@ module.exports = function($scope, $routeParams, $http, $location) {
           record.count = 0;
           record.packages = [];
 
-          authors.push(record);
+          maintainers.push(record);
         }
         record.count += 1;
         record.packages.push(node.id);
       });
     });
 
-    return authors.sort(function (x, y) { return y.count - x.count; });
+    return maintainers.sort(function (x, y) { return y.count - x.count; });
   }
 };
