@@ -33,7 +33,7 @@ button.btn {
   border-radius: 0;
 }
 
-div.packageInfo {
+div.infoBox {
   width: 300px;
   position: absolute;
   top: 52px;
@@ -51,25 +51,12 @@ div.packageInfo {
     border: 0; border-top: 1px solid @border-color;
     margin: 1em 0; padding: 0;
   }
-  pre {
-    border-radius: 0;
-    background-color: transparent;
-    border: 0;
-    color: @secondary-color;
-  }
-  .version {
-    color: @secondary-color;
-    float: right;
-  }
 
   .maintainerBox {
     float: left;
     margin-right: 4px;
     position: relative;
     overflow: visible;
-  }
-
-  .maintainersContainer {
   }
 
   .nodes {
@@ -107,6 +94,19 @@ div.packageInfo {
   ::selection {
       color: red; 
       background: yellow;
+  }
+
+  div.packageInfo {
+    pre {
+      border-radius: 0;
+      background-color: transparent;
+      border: 0;
+      color: @secondary-color;
+    }
+    .version {
+      color: @secondary-color;
+      float: right;
+    }
   }
 }
 

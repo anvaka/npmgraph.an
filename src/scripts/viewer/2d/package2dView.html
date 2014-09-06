@@ -11,24 +11,26 @@
   </node>
 </graph-viewer>
 
-<div class='packageInfo' ng-show='selectedPackage'>
-  <a ng-href='https://npmjs.org/package/{{selectedPackage.name}}'>{{selectedPackage.name}}</a>
-  <span class='version' title="version">{{selectedPackage.version}}</span>
-  <hr class='divider'>
-  <p class='description'>
-    {{selectedPackage.description}}
-  </p>
-  <pre class="sh sh_sourceCode"><code>npm install {{selectedPackage.name}}</code></pre>
-  <div class='maintainers'>
-    <div>maintainers</div>
-    <div class='maintainersContainer'>
-      <div ng-repeat="maintainer in maintainers" class='maintainerBox'>
-        <a href="#" ng-href='{{maintainer.profile}}' target="_blank">
-          <img ng-src="{{maintainer.avatar}}" />
-        </a>
+<div class='infoBox'>
+  <div class='packageInfo' ng-show='selectedPackage'>
+    <a ng-href='https://npmjs.org/package/{{selectedPackage.name}}'>{{selectedPackage.name}}</a>
+    <span class='version' title="version">{{selectedPackage.version}}</span>
+    <hr class='divider'>
+    <p class='description'>
+      {{selectedPackage.description}}
+    </p>
+    <pre class="sh sh_sourceCode"><code>npm install {{selectedPackage.name}}</code></pre>
+    <div class='maintainers'>
+      <div>maintainers</div>
+      <div class='maintainersContainer'>
+        <div ng-repeat="maintainer in maintainers" class='maintainerBox'>
+          <a href="#" ng-href='{{maintainer.profile}}' target="_blank">
+            <img ng-src="{{maintainer.avatar}}" />
+          </a>
+        </div>
       </div>
+      <div class='clearfix'></div>
     </div>
-    <div class='clearfix'></div>
   </div>
   <div class='graphInfo'>
     <hr>
@@ -48,7 +50,7 @@
       <div ng-repeat="author in authors" class='maintainerBox'
           >
         <a href="#" ng-href='{{author.profile}}' target="_blank">
-          <img ng-src="{{author.avatar}}" 
+          <img ng-src="{{author.avatar}}"
             ng-mouseenter='author.countVisible = true'
             ng-mouseleave='author.countVisible = false'/>
         </a>
@@ -61,7 +63,6 @@
   </div>
   </div>
 </div>
-
 <div class='switchMode' ng-show='canSwitchMode'>
   <button class="btn btn-xs btn-danger" ng-click="switchMode()" type="button">Show 3D</button>
 </div>
