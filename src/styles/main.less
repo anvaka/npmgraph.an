@@ -9,7 +9,7 @@ navbar {
 }
 
 .typeahead-container ul {
-  width: 300px;
+  width: 288px;
   overflow: hidden;
 }
 
@@ -18,8 +18,8 @@ navbar {
 }
 
 .search {
-  width: 300px;
-  margin: 15px 15px 15px 30px;
+  width: 288px;
+  margin: 12px;
   input {
     border: 0;
     border-radius: 0;
@@ -34,12 +34,14 @@ button.btn {
 }
 
 div.infoBox {
-  width: 300px;
+  background-color: @scene-background;
+  width: 315px;
   position: absolute;
-  top: 52px;
-  left: 31px;
-  padding: 11px 0;
+  top: 0;
+  height: 100%;
+  padding: 63px 12px 12px 12px;
   color: @primary-color;
+  border-right: 1px solid @border-color;
 
   a {
     color: @acent-color;
@@ -116,7 +118,7 @@ div.infoBox {
 }
 
 body {
-  background-color: #36394A;
+  background-color: @scene-background;
   position: absolute;
   overflow: hidden;
   margin: 0;
@@ -125,9 +127,9 @@ body {
 
 .graphView {
   position: absolute;
-  left: 0;
+  left: 315px;
   top: 0;
-  width: 100%;
+  right: 0px;
   height: 100%;
   svg {
     .full;
