@@ -127,12 +127,15 @@ body {
 
 .graphView {
   position: absolute;
-  left: 315px;
   top: 0;
+  left: 0;
   right: 0px;
   height: 100%;
-  svg {
-    .full;
+  &.d2d {
+    left: 315px;
+    svg {
+      .full;
+    }
   }
 }
 
@@ -157,5 +160,8 @@ body {
 .switchMode {
   position: absolute;
   bottom: 15px;
-  left: 330px;
+  left: 30px;
+  &.d2d {
+    left: 330px;
+  }
 }

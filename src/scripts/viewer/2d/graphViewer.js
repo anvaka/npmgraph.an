@@ -3,7 +3,7 @@ module.exports = require('an').directive(graphViewer);
 function graphViewer() {
   return {
     restrict: 'E',
-    template: '<div class="graphView"></div>',
+    template: '<div class="graphView d2d"></div>',
     replace: true,
     transclude: true,
     scope: {
