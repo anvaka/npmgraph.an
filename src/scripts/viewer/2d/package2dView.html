@@ -11,11 +11,19 @@
   </node>
 </graph-viewer>
 
-<div class='infoBox'>
-  <div class='packageInfo' ng-show='selectedPackage'>
+<div class='infoBox' ng-show='selectedPackage'>
+  <div class='header'>
+    <a ng-click='switchInfoMode("package", $event)' href='#'
+      ng-class='{"selected": packageInfoVisible}'>package info</a>
+    <a ng-click='switchInfoMode("graph", $event)' href='#'
+      ng-class='{"selected": graphInfoVisible}'
+      class='last'>graph info</a>
+    <div class='clearfix'></div>
+  </div>
+  <hr class='divider'>
+  <div class='packageInfo ng-cloak' ng-show='packageInfoVisible'>
     <a ng-href='https://npmjs.org/package/{{selectedPackage.name}}'>{{selectedPackage.name}}</a>
     <span class='version' title="version">{{selectedPackage.version}}</span>
-    <hr class='divider'>
     <p class='description'>
       {{selectedPackage.description}}
     </p>
@@ -32,8 +40,7 @@
       <div class='clearfix'></div>
     </div>
   </div>
-  <div class='graphInfo'>
-    <hr>
+  <div class='graphInfo ng-cloak' ng-show='graphInfoVisible'>
     <div class='nodes'>
       <p>nodes total</p>
       <p class='number'>{{nodesCount}}</p>

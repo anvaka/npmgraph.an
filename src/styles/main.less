@@ -20,14 +20,14 @@ navbar {
     li {
       a {
         white-space: normal;
-        color: #CFCCDF;
+        color: @primary-color;
         padding: 3px 12px;
         cursor: pointer;
       }
       &.active {
         a, a:hover, a:focus {
           background-color: transparent;
-          color: #E0DE0F;
+          color: @link-color;
         }
       }
     }
@@ -42,7 +42,7 @@ navbar {
     border-radius: 0;
   }
   button {
-    background: #C6C4DA;
+    background: @button-color;
   }
 }
 
@@ -56,12 +56,12 @@ div.infoBox {
   position: absolute;
   top: 0;
   height: 100%;
-  padding: 63px 12px 12px 12px;
+  padding: 52px 12px 12px 12px;
   color: @primary-color;
   border-right: 1px solid @border-color;
 
   a {
-    color: @acent-color;
+    color: @link-color;
     font-size: 18px;
   }
 
@@ -69,6 +69,9 @@ div.infoBox {
     display: block; height: 1px;
     border: 0; border-top: 1px solid @border-color;
     margin: 1em 0; padding: 0;
+  }
+  .description {
+    margin-top: 10px;
   }
 
   .maintainerBox {
@@ -88,7 +91,7 @@ div.infoBox {
   .number {
     font-size: 28px;
     line-height: 24px;
-    color: @acent-color;
+    color: @link-color;
   }
 
   .packagesCount {
@@ -103,6 +106,21 @@ div.infoBox {
     width: 47px;
     height: 25px;
     text-align: center;
+  }
+
+  .header {
+    margin: 12px 0;
+    a {
+      color: @acent-color;
+      float: left;
+      font-size: 22px;
+    }
+    a.selected {
+      color: @primary-color;
+    }
+    a.last {
+      float:right;
+    }
   }
 
   ::-moz-selection { /* Code for Firefox */

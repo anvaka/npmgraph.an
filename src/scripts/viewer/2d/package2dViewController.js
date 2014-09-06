@@ -8,6 +8,12 @@ module.exports = function($scope, $routeParams, $http, $location) {
   $scope.name = ' ' + $routeParams.pkgId;
   $scope.root = $routeParams.pkgId;
   $scope.onNodeSelected = applyToScope(selectPackage);
+  $scope.packageInfoVisible = true;
+  $scope.switchInfoMode = function (mode, e) {
+    e.preventDefault();
+    $scope.packageInfoVisible = mode === 'package';
+    $scope.graphInfoVisible = mode === 'graph';
+  };
   $scope.switchMode = function() {
     $location.path('view/3d/' + $routeParams.pkgId);
   };
