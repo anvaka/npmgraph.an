@@ -18,6 +18,16 @@ function infoController($scope) {
     if (selectedLicense) selectedLicense.selected = true;
 
     $scope.responsiveOpen = false;
+    if (e) {
+      // i know it's bad, but I'm not sure how to make it better:
+      var container = document.querySelector('.infoBox');
+      if (container) container.scrollTop = 0;
+    }
+  };
+
+  $scope.hideInfoBox = function (e) {
+    $scope.responsiveOpen = false;
+    e.preventDefault();
   };
 
   $scope.graphLoaded = false;
