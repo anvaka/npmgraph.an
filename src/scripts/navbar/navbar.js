@@ -14,6 +14,6 @@ function navbar() {
       onPackageSelected: '='
     },
     restrict: 'E',
-    template : fs.readFileSync(__dirname + '/navbar.html')
+    template : fs.readFileSync(__dirname + '/navbar.html', 'utf8')
   };
 }

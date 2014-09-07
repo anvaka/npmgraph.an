@@ -1,53 +1,30 @@
 /**
  * This controller is responsible for building graph from current route
  */
-require('./graphViewer');
 
-var toGravatar = require('./graphInfo/toGravatar');
+require('./graphViewer');
+var createGraphBuilder = require('../graphBuilder');
 
 module.exports = function($scope, $routeParams, $http, $location) {
-  $scope.name = ' ' + $routeParams.pkgId;
+  var applyToScope = require('../applyToScope')($scope);
+
   $scope.root = $routeParams.pkgId;
+  $scope.showProgress = true;
+  $scope.switchMode = switchMode;
 
-  $scope.highlightNodes = function (record, e) {
-    e.preventDefault();
-  };
-
-  $scope.onNodeSelected = applyToScope(selectPackage);
-  $scope.packageInfoVisible = true;
-  $scope.graphLoaded = false;
-
-  $scope.switchInfoMode = switchInfoMode;
-
-  $scope.switchMode = function() {
-    $location.path('view/3d/' + $routeParams.pkgId);
-  };
-
-  var graphBuilder = require('../graphBuilder')($routeParams.pkgId, $http, applyToScope(progressChanged));
+  var graphBuilder = createGraphBuilder($routeParams.pkgId, $http, applyToScope(progressChanged));
   $scope.graph = graphBuilder.graph;
+
   graphBuilder.start
-    .then(showGraphInfo)
-    .catch(showError);
+    .then(applyToScope(graphLoaded))
+    .catch(applyToScope(errorOccured));
 
   function progressChanged(queueLength) {
     $scope.progress = queueLength;
   }
 
-  function showGraphInfo() {
-    applyToScope(graphLoaded)();
-
-    var root = graphBuilder.graph.getNode($scope.root);
-    if (root) {
-      selectPackage(root);
-    }
-  }
-
-  function showError(err) {
-    applyToScope(errorOccured)(err);
-  }
-
   function errorOccured(err) {
-    $scope.isError = true;
+    $scope.showError = true;
     $scope.error = "error: " + err.status;
     $scope.errorData = {
       url: err.config.url,
@@ -57,40 +34,12 @@ module.exports = function($scope, $routeParams, $http, $location) {
   }
 
   function graphLoaded() {
-    // todo: check if it supports webgl
-    $scope.canSwitchMode = true;
-    $scope.linksCount = $scope.graph.getLinksCount();
-    $scope.nodesCount = $scope.graph.getNodesCount();
-
-    $scope.graphLoaded = true;
-    $scope.allMaintainers = require('./graphInfo/maintainers')($scope.graph);
-    $scope.allLicenses = require('./graphInfo/licenses')($scope.graph);
+    $scope.showSwitchMode = true; // todo: check if it supports webgl
+    $scope.showProgress = false;
+    $scope.$root.$broadcast('graph-loaded', $scope.root);
   }
 
-  function applyToScope(cb) {
-    return function() {
-      var args = arguments;
-      if (!$scope.$$phase) {
-        $scope.$apply(function() {
-          cb.apply(this, args);
-        });
-      } else {
-        cb.apply(this, args);
-      }
-    };
-  }
-
-  function selectPackage(node) {
-    var data = $scope.selectedPackage = node.data;
-
-    if (data.maintainers && data.maintainers.length) {
-      $scope.maintainers = data.maintainers.map(toGravatar);
-    }
-  }
-
-  function switchInfoMode(mode, e) {
-    if (e) e.preventDefault();
-    $scope.packageInfoVisible = mode === 'package';
-    $scope.graphInfoVisible = mode === 'graph';
+  function switchMode() {
+    $location.path('view/3d/' + $routeParams.pkgId);
   }
 };

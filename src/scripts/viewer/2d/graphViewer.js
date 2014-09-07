@@ -1,3 +1,5 @@
+require('../info/packageInfo');
+
 module.exports = require('an').directive(graphViewer);
 
 function graphViewer() {
@@ -49,7 +51,7 @@ function graphViewer() {
           renderer.node(graphUI.node).placeNode(graphUI.placeNode);
           renderer.link(graphUI.link).placeLink(graphUI.placeLink);
 
-          graphUI.on('nodeselected', scope.nodeSelected);
+          graphUI.on('nodeselected', onNodeSelected);
           graphUI.on('mouseenter', higlightNode);
 
           renderer.run();
@@ -69,6 +71,10 @@ function graphViewer() {
               graphUI.highlight(other.id, color);
               graphUI.highlightLink(link.id, color);
             });
+          }
+
+          function onNodeSelected(node) {
+            scope.$root.$broadcast('node-selected', node);
           }
         }
       }
