@@ -29,7 +29,7 @@
     </p>
     <pre class="sh sh_sourceCode"><code>npm install {{selectedPackage.name}}</code></pre>
     <div class='maintainers'>
-      <div>package maintainers</div>
+      <h4>maintainers</h4>
       <div class='maintainersContainer'>
         <div ng-repeat="maintainer in maintainers" class='maintainerBox'>
           <a href="#" ng-href='{{maintainer.profile}}' target="_blank">
@@ -51,22 +51,33 @@
     </div>
     <div class="clearfix"></div>
     <hr>
-  <div class='all-maintainers'>
-    <div>graph maintainers</div>
-    <div class='maintainersContainer'>
-      <div ng-repeat="maintainer in allMaintainers" class='maintainerBox'>
-        <a href="#" ng-href='{{maintainer.profile}}' target="_blank">
-          <img ng-src="{{maintainer.avatar}}"
-            ng-mouseenter='maintainer.countVisible = true'
-            ng-mouseleave='maintainer.countVisible = false'/>
-        </a>
-        <span class='packagesCount' ng-show='maintainer.countVisible'>
-          x {{maintainer.count}}
-        </span>
+    <div class='all-maintainers'>
+      <h4>maintainers</h4>
+      <div class='maintainersContainer'>
+        <div ng-repeat="maintainer in allMaintainers" class='maintainerBox'>
+          <a href="#" ng-href='{{maintainer.profile}}' target="_blank">
+            <img ng-src="{{maintainer.avatar}}"
+              ng-mouseenter='maintainer.countVisible = true'
+              ng-mouseleave='maintainer.countVisible = false'/>
+          </a>
+          <span class='packagesCount' ng-show='maintainer.countVisible'>
+            x {{maintainer.count}}
+          </span>
+        </div>
       </div>
+      <div class='clearfix'></div>
     </div>
-    <div class='clearfix'></div>
-  </div>
+    <hr>
+    <div class='all-licenses'>
+      <h4>licenses</h4>
+      <div class='licensesContainers'>
+        <div ng-repeat="license in allLicenses" class='license-row'>
+          <span>{{license.name}}</span>
+          <span class='last'>{{license.count}}</span>
+        </div>
+      </div>
+      <div class='clearfix'></div>
+    </div>
   </div>
 </div>
 <div class='switchMode d2d' ng-show='canSwitchMode'>

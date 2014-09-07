@@ -59,6 +59,7 @@ div.infoBox {
   padding: 52px 12px 12px 12px;
   color: @primary-color;
   border-right: 1px solid @border-color;
+  overflow-y: auto;
 
   a {
     color: @link-color;
@@ -112,7 +113,6 @@ div.infoBox {
     margin: 12px 0;
     a {
       color: @primary-color;
-      float: left;
       font-size: 22px;
     }
     a.selected {
@@ -120,9 +120,15 @@ div.infoBox {
       text-decoration: none;
       cursor: default;
     }
-    a.last {
-      float:right;
-    }
+  }
+
+  .license-row {
+    border-bottom: 1px solid @border-color;
+  }
+
+
+  .last {
+    float:right;
   }
 
   ::-moz-selection { /* Code for Firefox */
@@ -131,7 +137,7 @@ div.infoBox {
   }
 
   ::selection {
-      color: red; 
+      color: red;
       background: yellow;
   }
 

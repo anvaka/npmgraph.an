@@ -36,6 +36,7 @@ module.exports = function($scope, $routeParams, $http, $location) {
     $scope.nodesCount = $scope.graph.getNodesCount();
 
     $scope.allMaintainers = getAllMaintainers($scope.graph);
+    $scope.allLicenses = require('./graphInfo/licenses')($scope.graph);
   }
 
   function applyToScope(cb) {
