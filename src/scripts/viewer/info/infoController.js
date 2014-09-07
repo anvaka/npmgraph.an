@@ -3,13 +3,19 @@ module.exports = infoController;
 
 function infoController($scope) {
   var applyToScope = require('../applyToScope')($scope);
+  var selectedLicense;
 
   $scope.highlightNodes = function(record, e) {
     e.preventDefault();
+
     $scope.$root.$broadcast('highlight-node', {
       color: '#52CCE3',
       ids: record.packages
     });
+
+    if (selectedLicense) selectedLicense.selected = false;
+    selectedLicense = record;
+    if (selectedLicense) selectedLicense.selected = true;
   };
 
   $scope.graphLoaded = false;

@@ -58,8 +58,10 @@
     <div class='all-licenses'>
       <h4>licenses</h4>
       <div class='license-container'>
-        <a ng-repeat='license in allLicenses' class='license-row' href='#'
-           ng-click='highlightNodes(license, $event)'>
+        <a ng-repeat='license in allLicenses'
+           class='license-row' href='#'
+           ng-click='highlightNodes(license, $event)'
+           ng-class='{selected: license.selected}'>
           <span>{{license.name}}</span>
           <span class='last'>{{license.count}}</span>
         </a>
