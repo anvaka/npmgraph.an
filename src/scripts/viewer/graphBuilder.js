@@ -3,7 +3,7 @@
  */
 var createGraphBuilder = require('npmgraphbuilder');
 
-module.exports = function (pkgName, http) {
+module.exports = function (pkgName, http, changed) {
   var graph = require('ngraph.graph')();
 
   var graphBuilder = createGraphBuilder(function (url, data) {
@@ -14,6 +14,7 @@ module.exports = function (pkgName, http) {
   graph.on('changed', pinRootNode);
 
   var promise = graphBuilder.createNpmDependenciesGraph(pkgName, graph);
+  graphBuilder.notifyProgress(changed);
 
   return {
     graph: graph,

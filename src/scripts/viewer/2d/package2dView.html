@@ -80,6 +80,15 @@
     </div>
   </div>
 </div>
+
+<div ng-show='isError' class='failed'>
+  <h4>{{error}}</h4>
+  <pre>{{errorData | json}}</pre>
+</div>
+
+<div ng-hide='graphLoaded || isError' class='graph-progress'>
+  <h4>Remaining packages: <span>{{progress}}</span></h4>
+</div>
 <div class='switchMode d2d' ng-show='canSwitchMode'>
   <button class="btn btn-xs btn-danger" ng-click="switchMode()" type="button">Show 3D</button>
 </div>

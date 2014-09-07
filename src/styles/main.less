@@ -141,12 +141,6 @@ div.infoBox {
   }
 
   div.packageInfo {
-    pre {
-      border-radius: 0;
-      background-color: transparent;
-      border: 0;
-      color: @secondary-color;
-    }
     .version {
       color: @secondary-color;
       float: right;
@@ -157,6 +151,32 @@ div.infoBox {
 .full  {
   width: 100%;
   height: 100%;
+}
+
+.failed {
+  position: absolute;
+  width: 315px;
+  top: 57px;
+  padding: 12px;
+  color: @error-color;
+}
+
+.graph-progress {
+  position: absolute;
+  width: 315px;
+  top: 57px;
+  padding: 12px;
+  color: @primary-color;
+  span {
+    color: @acent-color;
+  }
+}
+
+pre {
+  border-radius: 0;
+  background-color: transparent;
+  border: 0;
+  color: @secondary-color;
 }
 
 body {

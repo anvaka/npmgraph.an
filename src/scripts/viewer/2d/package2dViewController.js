@@ -12,7 +12,7 @@ module.exports = function($scope, $routeParams, $http, $location) {
   $scope.packageInfoVisible = true;
   $scope.graphLoaded = false;
 
-  $scope.switchInfoMode = function (mode, e) {
+  $scope.switchInfoMode = function(mode, e) {
     e.preventDefault();
     $scope.packageInfoVisible = mode === 'package';
     $scope.graphInfoVisible = mode === 'graph';
@@ -21,16 +21,38 @@ module.exports = function($scope, $routeParams, $http, $location) {
     $location.path('view/3d/' + $routeParams.pkgId);
   };
 
-  var graphBuilder = require('../graphBuilder')($routeParams.pkgId, $http);
+  var graphBuilder = require('../graphBuilder')($routeParams.pkgId, $http, applyToScope(progressChanged));
   $scope.graph = graphBuilder.graph;
-  graphBuilder.start.then(function() {
+  graphBuilder.start
+      .then(showGraphInfo)
+      .catch(showError);
+
+  function progressChanged(queueLength) {
+    $scope.progress = queueLength;
+  }
+
+  function showGraphInfo() {
     applyToScope(graphLoaded)();
 
     var root = graphBuilder.graph.getNode($scope.root);
     if (root) {
       selectPackage(root);
     }
-  });
+  }
+
+  function showError(err) {
+    applyToScope(errorOccured)(err);
+  }
+
+  function errorOccured(err) {
+    $scope.isError = true;
+    $scope.error = "error: " + err.status;
+    $scope.errorData = {
+      url: err.config.url,
+      params: err.config.params,
+      method: err.config.method
+    };
+  }
 
   function graphLoaded() {
     // todo: check if it supports webgl
@@ -47,7 +69,7 @@ module.exports = function($scope, $routeParams, $http, $location) {
     return function() {
       var args = arguments;
       if (!$scope.$$phase) {
-        $scope.$apply(function () {
+        $scope.$apply(function() {
           cb.apply(this, args);
         });
       } else {
