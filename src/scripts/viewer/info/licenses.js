@@ -31,12 +31,27 @@ function getAllLicenses(graph) {
 function forEachLicnese(node, callback) {
   var license = 'unspecified';
   var pkg = node.data;
+  var fromLicenseField = getFromLicenseField(pkg.license);
 
-  if (typeof pkg.license === 'string') {
-    license = pkg.license;
-  } else if (typeof pkg.license === 'object' && pkg.license.type) {
-    license = pkg.license.type;
+  if (fromLicenseField) {
+    license = fromLicenseField;
+    callback(license, node);
+  } else if (pkg.licenses && pkg.licenses.length) {
+    for (var i = 0; i < pkg.licenses.length; ++i) {
+      fromLicenseField = getFromLicenseField(pkg.licenses[i]);
+      if (fromLicenseField) {
+        callback(fromLicenseField, node);
+      }
+    }
+  } else {
+    callback(license, node);
   }
+}
 
-  callback(license, node);
+function getFromLicenseField(field) {
+  if (typeof field === 'string') {
+    return field;
+  } else if (field && field.type) {
+    return field.type;
+  }
 }
