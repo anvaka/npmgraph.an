@@ -1,6 +1,8 @@
 var svg = require('simplesvg');
 var eventify = require('ngraph.events');
 var arrow = require('./arrow');
+var defaultNodeColor = '#CFCCDF';
+var defaultTextColor = '#484A5C';
 
 module.exports = function(svgRoot) {
   var nodeUIModels = Object.create(null);
@@ -15,6 +17,14 @@ module.exports = function(svgRoot) {
       info.ui.dataSource(info.model);
     },
 
+    setColor: function (nodeId, color, textColor) {
+      var info = nodeUIModels[nodeId];
+      var model = info.model;
+      model.originalColor = model.nodeColor = color;
+      model.originalTextColor = model.textColor = textColor || color;
+      info.ui.dataSource(info.model);
+    },
+
     highlightLink: highlightLink,
 
     resetLinks: function() {
@@ -25,9 +35,11 @@ module.exports = function(svgRoot) {
 
     resetHighlight: function(node) {
       var info = nodeUIModels[node.id];
-      info.model.nodeColor = '#CFCCDF';
-      info.model.textColor = '#484A5C';
-      info.ui.dataSource(info.model);
+      setNodeColor(info, info.model.originalColor, info.model.originalTextColor);
+    },
+
+    defaultHighlight: function(node) {
+      graphUI.setColor(node.id, defaultNodeColor, defaultTextColor);
     },
 
     node: function(node) {
@@ -39,9 +51,11 @@ module.exports = function(svgRoot) {
       ].join('\n'));
 
       var uiModel = {
-        nodeColor: '#CFCCDF',
-        textColor: '#484A5C',
-        text: node.id,
+        nodeColor: defaultNodeColor,
+        originalColor: defaultNodeColor,
+        textColor: defaultTextColor,
+        originalTextColor: defaultTextColor,
+        text: node.id
       };
 
       nodeUIModels[node.id] = {
@@ -90,5 +104,11 @@ module.exports = function(svgRoot) {
   function highlightLink(linkId, color) {
     var ui = linkUIModels[linkId];
     if (ui) ui.stroke(color);
+  }
+
+  function setNodeColor(info, nodeColor, textColor) {
+    info.model.nodeColor = nodeColor;
+    info.model.textColor = textColor;
+    info.ui.dataSource(info.model);
   }
 };

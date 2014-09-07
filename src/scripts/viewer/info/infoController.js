@@ -3,8 +3,13 @@ module.exports = infoController;
 
 function infoController($scope) {
   var applyToScope = require('../applyToScope')($scope);
+
   $scope.highlightNodes = function(record, e) {
     e.preventDefault();
+    $scope.$root.$broadcast('highlight-node', {
+      color: '#52CCE3',
+      ids: record.packages
+    });
   };
 
   $scope.graphLoaded = false;

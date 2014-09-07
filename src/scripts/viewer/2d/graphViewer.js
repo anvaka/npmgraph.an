@@ -43,6 +43,9 @@ function graphViewer() {
           });
 
           var rootNode = graph.getNode(scope.root);
+          scope.$on('highlight-node', function(_, request) {
+            highlightNodesFromRequest(request);
+          });
 
           renderer.layout.pinNode(rootNode, true);
 
@@ -61,7 +64,7 @@ function graphViewer() {
           return renderer;
 
           function higlightNode(node) {
-            graph.forEachNode(graphUI.resetHighlight);
+            resetHighlight();
 
             graphUI.resetLinks();
             graphUI.highlight(node.id, '#E0DE0F', '#E0DE0F');
@@ -73,8 +76,17 @@ function graphViewer() {
             });
           }
 
+          function resetHighlight() {
+            graph.forEachNode(graphUI.resetHighlight);
+          }
+
           function onNodeSelected(node) {
             scope.$root.$broadcast('node-selected', node);
+          }
+
+          function highlightNodesFromRequest(request) {
+            graph.forEachNode(graphUI.defaultHighlight);
+            request.ids.forEach(function (id) { graphUI.setColor(id, request.color); });
           }
         }
       }
