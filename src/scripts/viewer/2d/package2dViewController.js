@@ -2,7 +2,8 @@
  * This controller is responsible for building graph from current route
  */
 require('./graphViewer');
-var md5 = require('js-md5');
+
+var toGravatar = require('./graphInfo/toGravatar');
 
 module.exports = function($scope, $routeParams, $http, $location) {
   $scope.name = ' ' + $routeParams.pkgId;
@@ -38,7 +39,7 @@ module.exports = function($scope, $routeParams, $http, $location) {
     $scope.nodesCount = $scope.graph.getNodesCount();
 
     $scope.graphLoaded = true;
-    $scope.allMaintainers = getAllMaintainers($scope.graph);
+    $scope.allMaintainers = require('./graphInfo/maintainers')($scope.graph);
     $scope.allLicenses = require('./graphInfo/licenses')($scope.graph);
   }
 
@@ -60,36 +61,5 @@ module.exports = function($scope, $routeParams, $http, $location) {
     if (data.maintainers && data.maintainers.length) {
       $scope.maintainers = data.maintainers.map(toGravatar);
     }
-  }
-
-  function toGravatar(record) {
-    return {
-      avatar:'https://secure.gravatar.com/avatar/' + md5(record.email) + '?s=25&d=retro',
-      profile: 'https://www.npmjs.org/~' + record.name,
-      name: record.name,
-      email: record.email
-    };
-  }
-
-  function getAllMaintainers(graph) {
-    var histogram = {};
-    var maintainers = [];
-    graph.forEachNode(function (node) {
-      var data = node.data;
-      data.maintainers.forEach(function (maintainer) {
-        var record = histogram[maintainer.email];
-        if (!record) {
-          record = histogram[maintainer.email] = toGravatar(maintainer);
-          record.count = 0;
-          record.packages = [];
-
-          maintainers.push(record);
-        }
-        record.count += 1;
-        record.packages.push(node.id);
-      });
-    });
-
-    return maintainers.sort(function (x, y) { return y.count - x.count; });
   }
 };
