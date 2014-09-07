@@ -13,6 +13,12 @@
     <div ng-view class='full'></div>
     <navbar></navbar>
 
+    <div class='share' ng-controller='ShareController'>
+      <p><a href="https://github.com/anvaka/npmgraph.an">view source code</a></p>
+      <p><a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fgithub.com%2Fanvaka%2Fnpmgraph.an" ng-click='share("twitter", $event)'>share to twitter</a></p>
+      <p><a href="https://plus.google.com/share?url=https%3A%2F%2Fgithub.com%2Fanvaka%2Fnpmgraph.an" ng-click='share("google", $event)'>share to google+</a></p>
+    </div>
+
     <script type="text/javascript" charset="utf-8" src='external.min.js'></script>
     <script type="text/javascript" charset="utf-8" src='bundle.js'></script>
     <script>

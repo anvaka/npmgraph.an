@@ -128,11 +128,11 @@ div.infoBox {
   .header {
     margin: 12px 0;
     a {
-      color: @primary-color;
+      color: @secondary-color;
       font-size: 22px;
     }
     a.selected {
-      color: @acent-color;
+      color: @primary-color;
       text-decoration: none;
       cursor: default;
     }
@@ -261,5 +261,24 @@ body {
   left: 30px;
   &.d2d {
     left: 330px;
+  }
+}
+
+.share {
+  position: absolute;
+  right: 12px;
+  font-size: 12px;
+  top: 12px;
+
+  p {
+    margin-bottom: 2px;
+    text-align: right;
+    a {
+      color: @secondary-color;
+    }
+    a:hover, a:focus {
+      color: @link-color;
+      text-decoration: none;
+    }
   }
 }

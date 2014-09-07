@@ -1,5 +1,6 @@
 // we need this to use navbar directive
 require('./navbar/navbar');
+require('./shareController');
 
 // bootstrap angular application:
 npmVizApp = angular.module('npmViz', ['ngRoute']);
