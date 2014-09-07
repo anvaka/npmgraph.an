@@ -290,11 +290,23 @@ a.hide-info-box {
 }
 
 @media only screen and (max-width : 630px) {
-  .share,
   .switchMode {
     display: none;
   }
 
+  .share {
+    bottom: 12px;
+    font-size: 12px;
+    width: 100%;
+    text-align: center;
+    top: inherit;
+    padding-left: 19px;
+
+    p {
+      display: inline-block;
+      padding-right: 7px;
+    }
+  }
   navbar {
     background: @scene-background;
     right: 0;
@@ -309,7 +321,7 @@ a.hide-info-box {
   div.infoBox {
     width: 100%;
     top: inherit;
-    bottom: 0;
+    bottom: 27px;
     height: 68px;
     padding: 12px;
     border-right: 0px;
@@ -345,7 +357,7 @@ a.hide-info-box {
 
   .graph-progress {
     top: inherit;
-    bottom: 0;
+    bottom: 27px;
     left: 50%;
     margin-left: -100px;
   }
