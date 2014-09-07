@@ -9,6 +9,8 @@ module.exports = function($scope, $routeParams, $http, $location) {
   $scope.root = $routeParams.pkgId;
   $scope.onNodeSelected = applyToScope(selectPackage);
   $scope.packageInfoVisible = true;
+  $scope.graphLoaded = false;
+
   $scope.switchInfoMode = function (mode, e) {
     e.preventDefault();
     $scope.packageInfoVisible = mode === 'package';
@@ -21,7 +23,7 @@ module.exports = function($scope, $routeParams, $http, $location) {
   var graphBuilder = require('../graphBuilder')($routeParams.pkgId, $http);
   $scope.graph = graphBuilder.graph;
   graphBuilder.start.then(function() {
-    applyToScope(setCanSwitch)();
+    applyToScope(graphLoaded)();
 
     var root = graphBuilder.graph.getNode($scope.root);
     if (root) {
@@ -29,12 +31,13 @@ module.exports = function($scope, $routeParams, $http, $location) {
     }
   });
 
-  function setCanSwitch() {
+  function graphLoaded() {
     // todo: check if it supports webgl
     $scope.canSwitchMode = true;
     $scope.linksCount = $scope.graph.getLinksCount();
     $scope.nodesCount = $scope.graph.getNodesCount();
 
+    $scope.graphLoaded = true;
     $scope.allMaintainers = getAllMaintainers($scope.graph);
     $scope.allLicenses = require('./graphInfo/licenses')($scope.graph);
   }
