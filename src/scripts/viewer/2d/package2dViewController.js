@@ -8,6 +8,11 @@ var toGravatar = require('./graphInfo/toGravatar');
 module.exports = function($scope, $routeParams, $http, $location) {
   $scope.name = ' ' + $routeParams.pkgId;
   $scope.root = $routeParams.pkgId;
+
+  $scope.highlightNodes = function (record, e) {
+    e.preventDefault();
+  };
+
   $scope.onNodeSelected = applyToScope(selectPackage);
   $scope.packageInfoVisible = true;
   $scope.graphLoaded = false;

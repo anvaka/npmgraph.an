@@ -70,11 +70,12 @@
     <hr>
     <div class='all-licenses'>
       <h4>licenses</h4>
-      <div class='licensesContainers'>
-        <div ng-repeat="license in allLicenses" class='license-row'>
+      <div class='license-container'>
+        <a ng-repeat="license in allLicenses" class='license-row' href='#'
+           ng-click="highlightNodes(license, $event)">
           <span>{{license.name}}</span>
           <span class='last'>{{license.count}}</span>
-        </div>
+        </a>
       </div>
       <div class='clearfix'></div>
     </div>

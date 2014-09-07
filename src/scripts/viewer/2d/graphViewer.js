@@ -39,6 +39,7 @@ function graphViewer() {
             container: element[0],
             physics: require('../physics')()
           });
+
           var rootNode = graph.getNode(scope.root);
 
           renderer.layout.pinNode(rootNode, true);

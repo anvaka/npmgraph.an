@@ -106,6 +106,7 @@ div.infoBox {
     width: 47px;
     height: 25px;
     text-align: center;
+    color: @link-color;
   }
 
   .header {
@@ -121,10 +122,26 @@ div.infoBox {
     }
   }
 
-  .license-row {
-    border-bottom: 1px solid @border-color;
-  }
+  .license-container {
+    a {
+      display: block;
+      width: 100%;
+      color: @primary-color;
+      font-size: 14px;
+      font-family: helvetica;
+      &:hover, &:focus {
+        color: @link-color;
+        text-decoration: none;
+        span {
+          text-decoration: none;
+        }
+      }
+    }
 
+    .license-row {
+      border-bottom: 1px solid @border-color;
+    }
+  }
 
   .last {
     float:right;
