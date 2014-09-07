@@ -62,7 +62,6 @@ function graphViewer() {
 
             graphUI.resetLinks();
             graphUI.highlight(node.id, '#E0DE0F', '#E0DE0F');
-            scope.nodeSelected(node);
 
             graph.forEachLinkedNode(node.id, function(other, link) {
               var color = '#CFCCDF';

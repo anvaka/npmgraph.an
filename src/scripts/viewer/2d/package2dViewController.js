@@ -12,11 +12,8 @@ module.exports = function($scope, $routeParams, $http, $location) {
   $scope.packageInfoVisible = true;
   $scope.graphLoaded = false;
 
-  $scope.switchInfoMode = function(mode, e) {
-    e.preventDefault();
-    $scope.packageInfoVisible = mode === 'package';
-    $scope.graphInfoVisible = mode === 'graph';
-  };
+  $scope.switchInfoMode = switchInfoMode;
+
   $scope.switchMode = function() {
     $location.path('view/3d/' + $routeParams.pkgId);
   };
@@ -24,8 +21,8 @@ module.exports = function($scope, $routeParams, $http, $location) {
   var graphBuilder = require('../graphBuilder')($routeParams.pkgId, $http, applyToScope(progressChanged));
   $scope.graph = graphBuilder.graph;
   graphBuilder.start
-      .then(showGraphInfo)
-      .catch(showError);
+    .then(showGraphInfo)
+    .catch(showError);
 
   function progressChanged(queueLength) {
     $scope.progress = queueLength;
@@ -80,8 +77,15 @@ module.exports = function($scope, $routeParams, $http, $location) {
 
   function selectPackage(node) {
     var data = $scope.selectedPackage = node.data;
+
     if (data.maintainers && data.maintainers.length) {
       $scope.maintainers = data.maintainers.map(toGravatar);
     }
+  }
+
+  function switchInfoMode(mode, e) {
+    if (e) e.preventDefault();
+    $scope.packageInfoVisible = mode === 'package';
+    $scope.graphInfoVisible = mode === 'graph';
   }
 };
