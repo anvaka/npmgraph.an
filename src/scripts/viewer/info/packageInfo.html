@@ -14,13 +14,13 @@
     <p class='description'>
       {{selectedPackage.description}}
     </p>
-    <pre class="sh sh_sourceCode"><code>npm install {{selectedPackage.name}}</code></pre>
+    <pre class='sh sh_sourceCode'><code>npm install {{selectedPackage.name}}</code></pre>
     <div class='maintainers'>
       <h4>maintainers</h4>
       <div class='maintainersContainer'>
-        <div ng-repeat="maintainer in maintainers" class='maintainerBox'>
+        <div ng-repeat='maintainer in maintainers' class='maintainerBox'>
           <a href="#" ng-href='{{maintainer.profile}}' target="_blank">
-            <img ng-src="{{maintainer.avatar}}" />
+            <img ng-src='{{maintainer.avatar}}' />
           </a>
         </div>
       </div>
@@ -36,14 +36,14 @@
       <p># of links</p>
       <p class='number'>{{linksCount}}</p>
     </div>
-    <div class="clearfix"></div>
+    <div class='clearfix'></div>
     <hr>
     <div class='all-maintainers'>
       <h4>maintainers</h4>
       <div class='maintainersContainer'>
-        <div ng-repeat="maintainer in allMaintainers" class='maintainerBox'>
+        <div ng-repeat='maintainer in allMaintainers' class='maintainerBox'>
           <a href="#" ng-href='{{maintainer.profile}}' target="_blank">
-            <img ng-src="{{maintainer.avatar}}"
+            <img ng-src='{{maintainer.avatar}}'
               ng-mouseenter='maintainer.countVisible = true'
               ng-mouseleave='maintainer.countVisible = false'/>
           </a>
@@ -58,8 +58,8 @@
     <div class='all-licenses'>
       <h4>licenses</h4>
       <div class='license-container'>
-        <a ng-repeat="license in allLicenses" class='license-row' href='#'
-           ng-click="highlightNodes(license, $event)">
+        <a ng-repeat='license in allLicenses' class='license-row' href='#'
+           ng-click='highlightNodes(license, $event)'>
           <span>{{license.name}}</span>
           <span class='last'>{{license.count}}</span>
         </a>
