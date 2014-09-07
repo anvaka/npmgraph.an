@@ -41,7 +41,9 @@
     <div class='all-maintainers'>
       <h4>maintainers</h4>
       <div class='maintainersContainer'>
-        <div ng-repeat='maintainer in allMaintainers' class='maintainerBox'>
+        <div ng-repeat='maintainer in allMaintainers' class='maintainerBox'
+             ng-class='{selected: maintainer.selected}'
+             ng-click='highlightNodes(maintainer, $event)'>
           <a href="#" ng-href='{{maintainer.profile}}' target="_blank">
             <img ng-src='{{maintainer.avatar}}'
               ng-mouseenter='maintainer.countVisible = true'
@@ -50,6 +52,7 @@
           <span class='packagesCount' ng-show='maintainer.countVisible'>
             x {{maintainer.count}}
           </span>
+          <div class='border'></div>
         </div>
       </div>
       <div class='clearfix'></div>

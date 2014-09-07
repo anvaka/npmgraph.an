@@ -80,7 +80,24 @@ div.infoBox {
     margin-right: 4px;
     position: relative;
     overflow: visible;
+    .border {
+      display: none;
+      position: absolute;
+      width: 35px;
+      height: 36px;
+      border: 2px solid @acent-color;
+      top: -4px;
+      left: -5px;
+      z-index: 1;
+    }
+
+    &.selected {
+      .border {
+        display: block;
+      }
+    }
   }
+
 
   .nodes {
     float: left;
