@@ -16,6 +16,8 @@ function infoController($scope) {
     if (selectedLicense) selectedLicense.selected = false;
     selectedLicense = record;
     if (selectedLicense) selectedLicense.selected = true;
+
+    $scope.responsiveOpen = false;
   };
 
   $scope.graphLoaded = false;
@@ -34,6 +36,8 @@ function infoController($scope) {
     if (e) e.preventDefault();
     $scope.packageInfoVisible = mode === 'package';
     $scope.graphInfoVisible = mode === 'graph';
+    // only open in responsive mode when use explicitly clicked on a link:
+    $scope.responsiveOpen = !!e;
   }
 
   function selectNode(node) {

@@ -282,3 +282,71 @@ body {
     }
   }
 }
+
+a.hide-info-box {
+  display: none;
+  text-align: center;
+  width: 100%;
+}
+
+@media only screen and (max-width : 630px) {
+  .share,
+  .switchMode {
+    display: none;
+  }
+
+  navbar {
+    background: @scene-background;
+    right: 0;
+    form.search {
+      width: auto;
+      .typeahead-container ul {
+        width: auto;
+      }
+    }
+  }
+
+  div.infoBox {
+    width: 100%;
+    top: inherit;
+    bottom: 0;
+    height: 68px;
+    padding: 12px;
+    border-right: 0px;
+    overflow-y: hidden;
+    .header {
+      a.selected {
+        color: @secondary-color;
+        &:hover {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
+    }
+    &.responsive-open {
+      top: 50px;
+      height: inherit;
+      bottom: 0;
+      overflow-y: auto;
+      .header {
+        a.selected {
+          color: @primary-color;
+        }
+      }
+
+      a.hide-info-box {
+        display: block;
+      }
+    }
+  }
+  .graphView.d2d {
+    left: 0;
+  }
+
+  .graph-progress {
+    top: inherit;
+    bottom: 0;
+    left: 50%;
+    margin-left: -100px;
+  }
+}

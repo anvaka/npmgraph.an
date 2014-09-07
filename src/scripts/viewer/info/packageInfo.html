@@ -1,4 +1,5 @@
-<div class='infoBox' ng-show='graphLoaded'>
+<div class='infoBox' ng-show='graphLoaded' ng-class='{"responsive-open": responsiveOpen}'>
+  <a href='#' class='hide-info-box' ng-click='responsiveOpen = false; $event.preventDefault()' href='#'>show graph</a>
   <div class='header'>
     <a ng-click='switchInfoMode("package", $event)' href='#'
       ng-class='{"selected": packageInfoVisible}'>package info</a>
