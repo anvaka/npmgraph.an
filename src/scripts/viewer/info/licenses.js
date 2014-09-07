@@ -36,11 +36,15 @@ function forEachLicnese(node, callback) {
   if (fromLicenseField) {
     license = fromLicenseField;
     callback(license, node);
-  } else if (pkg.licenses && pkg.licenses.length) {
-    for (var i = 0; i < pkg.licenses.length; ++i) {
-      fromLicenseField = getFromLicenseField(pkg.licenses[i]);
-      if (fromLicenseField) {
-        callback(fromLicenseField, node);
+  } else if (pkg.licenses) {
+    if (typeof pkg.licenses === 'string') {
+      callback(pkg.licenses, node);
+    } else if (pkg.licenses.length) {
+      for (var i = 0; i < pkg.licenses.length; ++i) {
+        fromLicenseField = getFromLicenseField(pkg.licenses[i]);
+        if (fromLicenseField) {
+          callback(fromLicenseField, node);
+        }
       }
     }
   } else {
