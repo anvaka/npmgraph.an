@@ -1,8 +1,9 @@
 # npmgraph.an
 
-Experiment: how npmgraph can be implemented with angular, npm, browserify and [an](https://github.com/anvaka/an).
+Visualization of npm: http://npm.anvaka.com
 
-# install
+
+# Local development
 
 ```
 git clone https://github.com/anvaka/npmgraph.an.git
