@@ -22,7 +22,7 @@ Responsive view:
 
 The website is entirely hosted on [GitHub Pages](https://pages.github.com/), with continous deployment setup via [travis](https://github.com/anvaka/npmgraph.an/blob/master/.travis.yml).
 
-The npm data is coming from `isaacs.iriscouch.com` and is collected by [npmgraphbuilder](https://github.com/anvaka/npmgraphbuilder) in real time.
+The npm data is coming from `isaacs.iriscouch.com` and is collected by [npmgraphbuilder](https://github.com/anvaka/npmgraphbuilder) at real time.
 
 For CSS styles I'm using [twitter bootstrap](http://getbootstrap.com/css/) and [less](http://lesscss.org/).
 
