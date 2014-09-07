@@ -27,6 +27,7 @@ function infoController($scope) {
 
   function onSelectNode(e, node) {
     selectNode(node);
+    switchInfoMode('package');
   }
 
   function switchInfoMode(mode, e) {
