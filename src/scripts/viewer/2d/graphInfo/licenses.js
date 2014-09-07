@@ -8,9 +8,9 @@ function getAllLicenses(graph) {
 
   return licenses.sort(byCount);
 
-  function countNode(node) { forEachLicnese(node.data, countLicnese); }
+  function countNode(node) { forEachLicnese(node, countLicnese); }
 
-  function countLicnese(license, pkg) {
+  function countLicnese(license, node) {
     var record = histogram[license];
     if (!record) {
       record = histogram[license] = {};
@@ -20,7 +20,7 @@ function getAllLicenses(graph) {
       licenses.push(record);
     }
     record.count += 1;
-    record.packages.push(pkg.id);
+    record.packages.push(node.id);
   }
 
   function byCount(x, y) {
@@ -28,8 +28,9 @@ function getAllLicenses(graph) {
   }
 }
 
-function forEachLicnese(pkg, callback) {
+function forEachLicnese(node, callback) {
   var license = 'unspecified';
+  var pkg = node.data;
 
   if (typeof pkg.license === 'string') {
     license = pkg.license;
@@ -37,5 +38,5 @@ function forEachLicnese(pkg, callback) {
     license = pkg.license.type;
   }
 
-  callback(license, pkg);
+  callback(license, node);
 }
