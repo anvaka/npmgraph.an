@@ -7,6 +7,8 @@ function getAllMaintainers(graph) {
   var maintainers = [];
   graph.forEachNode(function(node) {
     var data = node.data;
+    // this can happen if package is removed and is no longer maintained
+    if (!data.maintainers) return;
     data.maintainers.forEach(countMaintainer);
 
     function countMaintainer(maintainer) {
