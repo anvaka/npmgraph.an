@@ -1,6 +1,6 @@
 # npmgraph.an
 
-[Visualization of npm](http://npm.anvaka.com) shows dependency graph of an npm package.
+[Visualization of npm](http://npm.anvaka.com) shows dependency graph of an npm package. Note, due to https://github.com/anvaka/npmgraph.an/issues/1 the current status of packages is not accurate.
 
 # Screenshots
 
