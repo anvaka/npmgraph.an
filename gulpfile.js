@@ -79,7 +79,7 @@ function copyDist() {
   gulp.src('./src/index.html').pipe(gulp.dest('./dist'));
 
   gulp.src([
-      './node_modules/angular/lib/angular.min.js',
+      './node_modules/angular/angular.min.js',
       './src/external/angular-route.js'
     ])
     .pipe(concat('external.min.js'))
