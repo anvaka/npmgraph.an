@@ -1,5 +1,7 @@
 # npmgraph.an
 
+**Warning:** Due to deprecation of CORS-enabled npm endpoint current data is stale. Please see [issue 1](https://github.com/anvaka/npmgraph.an/issues/1) for more details.
+
 [Visualization of npm](http://npm.anvaka.com) shows dependency graph of an npm package. Note, due to https://github.com/anvaka/npmgraph.an/issues/1 the current status of packages is not accurate.
 
 # Screenshots
