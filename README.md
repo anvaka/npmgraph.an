@@ -43,7 +43,7 @@ npm i
 npm start
 ```
 
-This should start local dev server and serve npm registry.
+This should start local dev server and serve npm visualization.
 
 # license
 
