@@ -41,10 +41,10 @@
     "js-md5": "^0.1.2",
     "ngraph.events": "0.0.3",
     "ngraph.graph": "0.0.8",
-    "ngraph.svg": "0.0.12",
+    "ngraph.svg": "0.0.13",
     "ngraph.three": "0.0.11",
     "npmgraphbuilder": "0.0.3",
-    "simplesvg": "0.0.9",
+    "simplesvg": "0.0.10",
     "three2stl": "0.0.1",
     "twitter-bootstrap-3.0.0": "^3.0.0",
     "typeahead.an": "~0.0.1"
