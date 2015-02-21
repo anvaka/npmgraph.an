@@ -1,4 +1,5 @@
 module.exports = require('an').controller(navbarController);
+var registryUrl = require('../config.js').registryUrl;
 
 function navbarController($scope, $http, $routeParams, $location) {
   $scope.formatPkg = function (model) {
@@ -23,11 +24,10 @@ function navbarController($scope, $http, $routeParams, $location) {
   };
 
   $scope.getPackages = function(val) {
-    return $http.jsonp('http://isaacs.iriscouch.com/registry/_design/scratch/_view/byField', {
+    return $http.get(registryUrl, {
       params: {
         limit: 10,
         reduce: false,
-        callback: 'JSON_CALLBACK',
         startkey: JSON.stringify(val)
       }
     }).then(function(res){

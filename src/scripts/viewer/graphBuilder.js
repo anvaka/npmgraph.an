@@ -2,14 +2,14 @@
  * Creates a graph for a give package name
  */
 var createGraphBuilder = require('npmgraphbuilder');
+var registryUrl = require('../config.js').registryUrl;
 
 module.exports = function (pkgName, http, changed) {
   var graph = require('ngraph.graph')();
 
   var graphBuilder = createGraphBuilder(function (url, data) {
-    data.callback = 'JSON_CALLBACK';
-    return http.jsonp(url, {params: data});
-  });
+    return http.get(url, {params: data});
+  }, registryUrl);
 
   graph.on('changed', pinRootNode);
 
