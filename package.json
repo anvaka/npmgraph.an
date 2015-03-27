@@ -36,11 +36,11 @@
     "gulp": "^3.8.7"
   },
   "dependencies": {
-    "an": "0.0.6",
+    "an": "0.0.7",
     "angular": "~1.2.10",
     "js-md5": "^0.1.2",
     "ngraph.events": "0.0.3",
-    "ngraph.graph": "0.0.8",
+    "ngraph.graph": "0.0.10",
     "ngraph.svg": "0.0.13",
     "ngraph.three": "0.0.11",
     "npmgraphbuilder": "0.0.3",
