@@ -37,10 +37,12 @@ function graphViewer() {
         scope.$on('$destroy', renderer.dispose);
 
         function createRenderer() {
-          var renderer = require('ngraph.svg')(graph, {
+          var settings = {
+            physics: require('../physics')(),
             container: element[0],
-            physics: require('../physics')()
-          });
+            scrollSpeed: 0.02
+          };
+          var renderer = require('ngraph.svg')(graph, settings);
 
           var rootNode = graph.getNode(scope.root);
           scope.$on('highlight-node', function(_, request) {
