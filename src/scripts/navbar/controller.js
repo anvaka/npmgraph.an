@@ -1,5 +1,5 @@
 module.exports = require('an').controller(navbarController);
-var registryUrl = require('../config.js').registryUrl;
+var registryUrl = require('../config.js').autoCompleteUrl;
 
 function navbarController($scope, $http, $routeParams, $location) {
   $scope.formatPkg = function (model) {

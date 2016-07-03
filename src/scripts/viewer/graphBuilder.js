@@ -4,33 +4,20 @@
 var createGraphBuilder = require('npmgraphbuilder');
 var registryUrl = require('../config.js').registryUrl;
 
-module.exports = function (pkgName, http, changed) {
-  var graph = require('ngraph.graph')();
+module.exports = buildGraph;
 
-  var graphBuilder = createGraphBuilder(function (url, data) {
-    return http.get(url, {params: data});
+function buildGraph(pkgName, version, http, changed) {
+  var graph = require('ngraph.graph')({uniqueLinkId: false});
+
+  var graphBuilder = createGraphBuilder(function (url) {
+    return http.get(url);
   }, registryUrl);
 
-  graph.on('changed', pinRootNode);
-
-  var promise = graphBuilder.createNpmDependenciesGraph(pkgName, graph);
   graphBuilder.notifyProgress(changed);
+  var promise = graphBuilder.createNpmDependenciesGraph(pkgName, graph, version);
 
   return {
     graph: graph,
     start: promise
   };
-
-  function pinRootNode(changes) {
-    for (var i = 0; i < changes.length; ++i) {
-      var change = changes[i];
-      var isRootAdded = change.changeType === 'add' &&
-                        change.node && change.node.id === pkgName;
-      if (isRootAdded) {
-        var data = change.node.data || (change.node.data = {});
-        data.isPinned = true;
-        graph.off('changed', pinRootNode);
-      }
-    }
-  }
-};
+}

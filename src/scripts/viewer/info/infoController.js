@@ -58,7 +58,7 @@ function infoController($scope) {
     }
   }
 
-  function graphLoaded(e, rootId) {
+  function graphLoaded() {
     var graph = $scope.graph;
     $scope.linksCount = graph.getLinksCount();
     $scope.nodesCount = graph.getNodesCount();
@@ -67,7 +67,7 @@ function infoController($scope) {
     $scope.allMaintainers = require('./maintainers')(graph);
     $scope.allLicenses = require('./licenses')(graph);
 
-    selectNode(graph.getNode(rootId));
+    selectNode(graph.root);
   }
 }
 

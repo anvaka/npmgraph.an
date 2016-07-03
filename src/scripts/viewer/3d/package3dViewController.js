@@ -4,12 +4,17 @@ module.exports = function($scope, $routeParams, $http, $location) {
   $scope.name = ' ' + $routeParams.pkgId;
 
   $scope.switchMode = function() {
-    $location.path('view/2d/' + $routeParams.pkgId);
+    // TODO: remove duplicate
+    var path = 'view/2d/' + $routeParams.pkgId;
+    if ($routeParams.version) {
+      path += '/' + $routeParams.version;
+    }
+    $location.path(path);
   };
 
   $scope.exportModel = function() {};
 
-  var graphBuilder = require('../graphBuilder')($routeParams.pkgId, $http);
+  var graphBuilder = require('../graphBuilder')($routeParams.pkgId, $routeParams.version, $http);
   graphBuilder.start.then(function() {
     // todo: check if it supports webgl
     if (!$scope.$$phase) {

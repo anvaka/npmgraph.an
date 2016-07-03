@@ -44,12 +44,9 @@ function graphViewer() {
           };
           var renderer = require('ngraph.svg')(graph, settings);
 
-          var rootNode = graph.getNode(scope.root);
           scope.$on('highlight-node', function(_, request) {
             highlightNodesFromRequest(request);
           });
-
-          renderer.layout.pinNode(rootNode, true);
 
           var graphUI = require('./graphUI')(renderer.svgRoot);
 
@@ -61,9 +58,28 @@ function graphViewer() {
 
           renderer.run();
 
-          higlightNode(rootNode);
+          var rootNode = graph.getNode(scope.root);
+          if (rootNode) {
+            renderer.layout.pinNode(rootNode, true);
+            higlightNode(rootNode);
+          } else {
+            graph.on('changed', pinRootNode);
+          }
 
           return renderer;
+
+          function pinRootNode(changes) {
+            for (var i = 0; i < changes.length; ++i) {
+              var change = changes[i];
+              var isRootAdded = change.changeType === 'add' && change.node;
+              if (isRootAdded) {
+                graph.root = change.node;
+                renderer.layout.pinNode(change.node, true);
+                higlightNode(change.node);
+                graph.off('changed', pinRootNode);
+              }
+            }
+          }
 
           function higlightNode(node) {
             resetHighlight();

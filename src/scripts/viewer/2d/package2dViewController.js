@@ -8,11 +8,12 @@ var createGraphBuilder = require('../graphBuilder');
 module.exports = function($scope, $routeParams, $http, $location) {
   var applyToScope = require('../applyToScope')($scope);
 
+  // TODO: Remove root, it's no longer valid
   $scope.root = $routeParams.pkgId;
   $scope.showProgress = true;
   $scope.switchMode = switchMode;
 
-  var graphBuilder = createGraphBuilder($routeParams.pkgId, $http, applyToScope(progressChanged));
+  var graphBuilder = createGraphBuilder($routeParams.pkgId, $routeParams.version, $http, applyToScope(progressChanged));
   $scope.graph = graphBuilder.graph;
 
   graphBuilder.start
@@ -36,10 +37,14 @@ module.exports = function($scope, $routeParams, $http, $location) {
   function graphLoaded() {
     $scope.showSwitchMode = true; // todo: check if it supports webgl
     $scope.showProgress = false;
-    $scope.$root.$broadcast('graph-loaded', $scope.root);
+    $scope.$root.$broadcast('graph-loaded', $scope.graph);
   }
 
   function switchMode() {
-    $location.path('view/3d/' + $routeParams.pkgId);
+    var path = 'view/3d/' + $routeParams.pkgId;
+    if ($routeParams.version) {
+      path += '/' + $routeParams.version;
+    }
+    $location.path(path);
   }
 };
