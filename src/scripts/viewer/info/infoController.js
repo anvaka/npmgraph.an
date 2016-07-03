@@ -18,11 +18,12 @@ function infoController($scope) {
     if (selectedLicense) selectedLicense.selected = true;
 
     $scope.responsiveOpen = false;
-    if (e) {
-      // i know it's bad, but I'm not sure how to make it better:
-      var container = document.querySelector('.infoBox');
-      if (container) container.scrollTop = 0;
-    }
+    // TODO: Not sure what I wanted to do with this
+    // if (e) {
+    //   // i know it's bad, but I'm not sure how to make it better:
+    //   var container = document.querySelector('.infoBox');
+    //   if (container) container.scrollTop = 0;
+    // }
   };
 
   $scope.hideInfoBox = function (e) {
@@ -66,6 +67,7 @@ function infoController($scope) {
     $scope.graphLoaded = true;
     $scope.allMaintainers = require('./maintainers')(graph);
     $scope.allLicenses = require('./licenses')(graph);
+    $scope.allNames = require('./names')(graph);
 
     selectNode(graph.root);
   }

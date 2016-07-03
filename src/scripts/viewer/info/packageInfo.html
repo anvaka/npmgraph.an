@@ -72,5 +72,18 @@
       </div>
       <div class='clearfix'></div>
     </div>
+    <div class='all-licenses'>
+      <h4>names</h4>
+      <div class='license-container'>
+        <a ng-repeat='name in allNames'
+           class='license-row' href='#'
+           ng-click='highlightNodes(name, $event)'
+           ng-class='{selected: name.selected}'>
+          <span>{{name.name}}</span>
+          <span class='last'>{{name.count}}</span>
+        </a>
+      </div>
+      <div class='clearfix'></div>
+    </div>
   </div>
 </div>
