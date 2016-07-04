@@ -44,6 +44,7 @@
     "ngraph.merge": "0.0.1",
     "ngraph.svg": "0.0.15",
     "ngraph.three": "0.0.11",
+    "npm-package-arg": "^4.2.0",
     "npmgraphbuilder": "2.0.0",
     "simplesvg": "0.0.10",
     "three2stl": "0.0.1",

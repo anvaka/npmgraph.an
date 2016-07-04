@@ -3,6 +3,7 @@
  */
 
 require('./graphViewer');
+var getLocation = require('../getLocation.js');
 var createGraphBuilder = require('../graphBuilder');
 
 module.exports = function($scope, $routeParams, $http, $location) {
@@ -26,12 +27,21 @@ module.exports = function($scope, $routeParams, $http, $location) {
 
   function errorOccured(err) {
     $scope.showError = true;
-    $scope.error = "error: " + err.status;
-    $scope.errorData = {
-      url: err.config.url,
-      params: err.config.params,
-      method: err.config.method
-    };
+    $scope.showProgress = false;
+
+    if (err.status) {
+      $scope.error = "error: " + err.status;
+      $scope.errorData = {
+        url: err.config.url,
+        params: err.config.params,
+        method: err.config.method
+      };
+    } else {
+      $scope.error = "Error";
+      $scope.errorData = {
+        message: err.message
+      };
+    }
   }
 
   function graphLoaded() {
@@ -41,10 +51,7 @@ module.exports = function($scope, $routeParams, $http, $location) {
   }
 
   function switchMode() {
-    var path = 'view/3d/' + $routeParams.pkgId;
-    if ($routeParams.version) {
-      path += '/' + $routeParams.version;
-    }
+    var path = getLocation($routeParams, /* is2d = */ false);
     $location.path(path);
   }
 };

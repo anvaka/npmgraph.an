@@ -11,15 +11,17 @@ function navbarController($scope, $http, $routeParams, $location) {
 
   var path = $location.path();
   if (path) {
-    var pathParts = path.split('/');
-    $scope.selectedPackage = pathParts[pathParts.length - 1];
+    // TODO: why routeParams does not work here?
+    var pathParts = path.match(/\/view\/[23]d\/([^\/]+)\/?/);
+    $scope.selectedPackage = decodeURIComponent(pathParts[1] || '');
   }
 
   $scope.viewPackage = function (pkg) {
+    var path = encodeURIComponent(pkg.id)
     if ($location.path().indexOf('/view/3d/') !== -1) {
-      $location.path('/view/3d/' + pkg.id);
+      $location.path('/view/3d/' + path);
     } else {
-      $location.path('/view/2d/' + pkg.id);
+      $location.path('/view/2d/' + path);
     }
   };
 

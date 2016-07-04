@@ -1,14 +1,11 @@
 var create3DRenderer;
+var getLocation = require('../getLocation.js');
 
 module.exports = function($scope, $routeParams, $http, $location) {
   $scope.name = ' ' + $routeParams.pkgId;
 
   $scope.switchMode = function() {
-    // TODO: remove duplicate
-    var path = 'view/2d/' + $routeParams.pkgId;
-    if ($routeParams.version) {
-      path += '/' + $routeParams.version;
-    }
+    var path = getLocation($routeParams, /* is2d = */ true);
     $location.path(path);
   };
 

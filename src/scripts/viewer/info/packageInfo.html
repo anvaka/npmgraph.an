@@ -11,7 +11,12 @@
   <hr class='divider'>
   <div class='packageInfo ng-cloak' ng-show='packageInfoVisible'>
     <a ng-href='https://npmjs.org/package/{{selectedPackage.name}}'>{{selectedPackage.name}}</a>
-    <span class='version' title="version">{{selectedPackage.version}}</span>
+    <span class='version' title="version" ng-hide='versions'>{{selectedPackage.version}}</span>
+    <span class='version' title="version" ng-show='versions'>
+      <select ng-model="selectedVersion"
+              ng-options="version for version in versions"
+              ng-change='renderUpdatedVersion()'></select>
+    </span>
     <p class='description'>
       {{selectedPackage.description}}
     </p>

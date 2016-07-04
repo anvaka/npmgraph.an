@@ -1,7 +1,10 @@
 var toGravatar = require('./toGravatar');
+var getPackageVersions = require('../../getPackageVersions.js');
+var getLocation = require('../getLocation.js');
+
 module.exports = infoController;
 
-function infoController($scope) {
+function infoController($scope, $http, $q, $location, $routeParams) {
   var applyToScope = require('../applyToScope')($scope);
   var selectedLicense;
 
@@ -18,12 +21,12 @@ function infoController($scope) {
     if (selectedLicense) selectedLicense.selected = true;
 
     $scope.responsiveOpen = false;
-    // TODO: Not sure what I wanted to do with this
-    // if (e) {
-    //   // i know it's bad, but I'm not sure how to make it better:
-    //   var container = document.querySelector('.infoBox');
-    //   if (container) container.scrollTop = 0;
-    // }
+    if (e && document.body.client.width < 630) {
+      // On small screens this scrolls package Info/graph info into view.
+      // TODO: Get rid of this code.
+      var container = document.querySelector('.infoBox');
+      if (container) container.scrollTop = 0;
+    }
   };
 
   $scope.hideInfoBox = function (e) {
@@ -34,6 +37,7 @@ function infoController($scope) {
   $scope.graphLoaded = false;
   $scope.packageInfoVisible = true;
 
+  $scope.renderUpdatedVersion = renderUpdatedVersion;
   $scope.switchInfoMode = switchInfoMode;
   $scope.$on('node-selected', applyToScope(onSelectNode));
   $scope.$on('graph-loaded', graphLoaded);
@@ -41,6 +45,31 @@ function infoController($scope) {
   function onSelectNode(e, node) {
     selectNode(node);
     switchInfoMode('package');
+  }
+
+  function renderUpdatedVersion() {
+    var path = getLocation(
+      $routeParams, /* is2d = */ true,
+      $scope.selectedVersion,
+      $scope.selectedPackage.name
+    )
+
+    $location.path(path);
+  }
+
+  function updateVersions(name) {
+    getPackageVersions($http, $q, name).then(function(versions) {
+      if (name !== getSelectedPackageName()) {
+        return;
+      }
+
+      $scope.versions = versions;
+      $scope.selectedVersion = $scope.selectedPackage.version;
+    });
+  }
+
+  function getSelectedPackageName() {
+    return $scope.selectedPackage && $scope.selectedPackage.name;
   }
 
   function switchInfoMode(mode, e) {
@@ -57,6 +86,8 @@ function infoController($scope) {
     if (data.maintainers && data.maintainers.length) {
       $scope.maintainers = data.maintainers.map(toGravatar);
     }
+
+    updateVersions(getSelectedPackageName());
   }
 
   function graphLoaded() {
@@ -73,4 +104,4 @@ function infoController($scope) {
   }
 }
 
-infoController.$inject = ['$scope'];
+infoController.$inject = ['$scope', '$http', '$q', '$location', '$routeParams'];
