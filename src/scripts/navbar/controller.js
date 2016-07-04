@@ -1,7 +1,7 @@
 module.exports = require('an').controller(navbarController);
 var registryUrl = require('../config.js').autoCompleteUrl;
 
-function navbarController($scope, $http, $routeParams, $location) {
+function navbarController($scope, $http, $routeParams, $location, $q) {
   $scope.formatPkg = function (model) {
     if (typeof  model === 'string') {
       return model;
@@ -16,7 +16,7 @@ function navbarController($scope, $http, $routeParams, $location) {
     $scope.selectedPackage = decodeURIComponent(pathParts[1] || '');
   }
 
-  $scope.viewPackage = function (pkg) {
+  $scope.viewPackage = function (pkg, query) {
     var path = encodeURIComponent(pkg.id)
     if ($location.path().indexOf('/view/3d/') !== -1) {
       $location.path('/view/3d/' + path);
@@ -26,6 +26,15 @@ function navbarController($scope, $http, $routeParams, $location) {
   };
 
   $scope.getPackages = function(val) {
+    if (val && val[0] === '@') {
+      // scoped package, cannot suggest anything
+      return $q.when([{
+        id: val,
+        value: {
+          description: ''
+        }
+      }]);
+    }
     return $http.get(registryUrl, {
       params: {
         limit: 10,
