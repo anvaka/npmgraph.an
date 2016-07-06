@@ -13,7 +13,7 @@ function navbarController($scope, $http, $routeParams, $location, $q) {
   if (path) {
     // TODO: why routeParams does not work here?
     var pathParts = path.match(/\/view\/[23]d\/([^\/]+)\/?/);
-    $scope.selectedPackage = decodeURIComponent(pathParts[1] || '');
+    if (pathParts) $scope.selectedPackage = decodeURIComponent(pathParts[1] || '');
   }
 
   $scope.viewPackage = function (pkg, query) {
