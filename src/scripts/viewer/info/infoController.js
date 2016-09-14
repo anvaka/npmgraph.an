@@ -101,6 +101,7 @@ function infoController($scope, $http, $q, $location, $routeParams) {
     $scope.allNames = require('./names')(graph);
 
     selectNode(graph.root);
+    switchInfoMode('graph');
   }
 }
 
