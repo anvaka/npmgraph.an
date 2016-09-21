@@ -10,27 +10,33 @@
   </div>
   <hr class='divider'>
   <div class='packageInfo ng-cloak' ng-show='packageInfoVisible'>
-    <a ng-href='https://npmjs.org/package/{{selectedPackage.name}}'>{{selectedPackage.name}}</a>
-    <span class='version' title="version" ng-hide='versions'>{{selectedPackage.version}}</span>
-    <span class='version' title="version" ng-show='versions'>
-      <select ng-model="selectedVersion"
-              ng-options="version for version in versions"
-              ng-change='renderUpdatedVersion()'></select>
-    </span>
-    <p class='description'>
-      {{selectedPackage.description}}
-    </p>
-    <pre class='sh sh_sourceCode'><code>npm install {{selectedPackage.name}}</code></pre>
-    <div class='maintainers'>
-      <h4>maintainers</h4>
-      <div class='maintainersContainer'>
-        <div ng-repeat='maintainer in maintainers' class='maintainerBox'>
-          <a href="#" ng-href='{{maintainer.profile}}' target="_blank">
-            <img ng-src='{{maintainer.avatar}}' />
-          </a>
+    <div ng-show='selectedPackage.name'>
+      <a ng-href='https://npmjs.org/package/{{selectedPackage.name}}'>{{selectedPackage.name}}</a>
+      <span class='version' title="version" ng-hide='versions'>{{selectedPackage.version}}</span>
+      <span class='version' title="version" ng-show='versions'>
+        <select ng-model="selectedVersion"
+                ng-options="version for version in versions"
+                ng-change='renderUpdatedVersion()'></select>
+      </span>
+      <p class='description'>
+        {{selectedPackage.description}}
+      </p>
+      <pre class='sh sh_sourceCode'><code>npm install {{selectedPackage.name}}</code></pre>
+      <div class='maintainers'>
+        <h4>maintainers</h4>
+        <div class='maintainersContainer'>
+          <div ng-repeat='maintainer in maintainers' class='maintainerBox'>
+            <a href="#" ng-href='{{maintainer.profile}}' target="_blank">
+              <img ng-src='{{maintainer.avatar}}' />
+            </a>
+          </div>
         </div>
+        <div class='clearfix'></div>
       </div>
-      <div class='clearfix'></div>
+    </div>
+    <div ng-hide='selectedPackage.name'>
+      <h4>Remote dependency</h4>
+      <pre class='sh sh_sourceCode'><code>npm install {{selectedPackage.id}}</code></pre>
     </div>
   </div>
   <div class='graphInfo ng-cloak' ng-show='graphInfoVisible'>

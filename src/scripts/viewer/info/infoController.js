@@ -81,13 +81,23 @@ function infoController($scope, $http, $q, $location, $routeParams) {
   }
 
   function selectNode(node) {
-    var data = $scope.selectedPackage = node.data;
+    var data = node.data;
+    if (data && !('name' in data)) {
+      data = {
+        id: node.id,
+        remote: true
+      };
+    }
+
+    $scope.selectedPackage = data;
 
     if (data.maintainers && data.maintainers.length) {
       $scope.maintainers = data.maintainers.map(toGravatar);
     }
 
-    updateVersions(getSelectedPackageName());
+    if (!data.remote) {
+      updateVersions(getSelectedPackageName());
+    }
   }
 
   function graphLoaded() {
