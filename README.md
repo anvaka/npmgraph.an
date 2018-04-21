@@ -45,6 +45,15 @@ npm start
 
 This should start local dev server and serve npm visualization.
 
+# Other projects
+
+Here I will try to list other projects that visualize npm. 
+
+* http://npm.broofa.com/ - renders dependency graph with direct acyclic graph layout alrogirthm.
+* [galaxy](https://anvaka.github.io/pm/#/galaxy/npm?cx=-1345&cy=-7006&cz=-6553&lx=0.6217&ly=-0.6459&lz=0.3098&lw=0.3168&ml=150&s=1.75&l=1&v=2017-11-22T00-00-00Z) - 3D gallaxy simulator of npm packages.
+
+If you have other projects that you want to see here, please send me a pull request or a hint.
+
 # license
 
 MIT
