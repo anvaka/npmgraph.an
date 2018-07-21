@@ -12,7 +12,8 @@ function graphViewer() {
       'source': '=',
       'nodeSelected': '=',
       'root': '=',
-      'mode': '='
+      'mode': '=',
+      'showSize': '='
     },
 
     compile: function(tElement, tAttrs, transclude) {
@@ -48,7 +49,7 @@ function graphViewer() {
             highlightNodesFromRequest(request);
           });
 
-          var graphUI = require('./graphUI')(renderer.svgRoot);
+          var graphUI = require('./graphUI')(renderer.svgRoot, scope.showSize);
 
           renderer.node(graphUI.node).placeNode(graphUI.placeNode);
           renderer.link(graphUI.link).placeLink(graphUI.placeLink);

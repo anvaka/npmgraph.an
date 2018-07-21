@@ -24,4 +24,6 @@
 
 <div ng-show='showSwitchMode' class='switchMode d2d'>
   <button class="btn btn-xs btn-danger" ng-click="switchMode()" type="button">Show 3D</button>
+  <button class="btn btn-xs btn-danger" ng-hide="showSize" ng-click="toggleSize()" type="button">Toggle Size</button>
+  <button class="btn btn-xs btn-success" ng-show="showSize" ng-click="toggleSize()" type="button">Toggle Size</button>
 </div>

@@ -7,19 +7,15 @@ var getLocation = require('../getLocation.js');
 var createGraphBuilder = require('../graphBuilder');
 
 module.exports = function($scope, $routeParams, $http, $location) {
-  var applyToScope = require('../applyToScope')($scope);
 
   // TODO: Remove root, it's no longer valid
   $scope.root = $routeParams.pkgId;
   $scope.showProgress = true;
   $scope.switchMode = switchMode;
+  $scope.showSize = false;
+  $scope.toggleSize = toggleSize;
 
-  var graphBuilder = createGraphBuilder($routeParams.pkgId, $routeParams.version, $http, applyToScope(progressChanged));
-  $scope.graph = graphBuilder.graph;
-
-  graphBuilder.start
-    .then(applyToScope(graphLoaded))
-    .catch(applyToScope(errorOccured));
+  refreshGraph();
 
   function progressChanged(queueLength) {
     $scope.progress = queueLength;
@@ -53,5 +49,21 @@ module.exports = function($scope, $routeParams, $http, $location) {
   function switchMode() {
     var path = getLocation($routeParams, /* is2d = */ false);
     $location.path(path);
+  }
+
+  function toggleSize() {
+    $scope.showSize = !$scope.showSize;
+    refreshGraph();
+  }
+
+  function refreshGraph() {
+    var applyToScope = require('../applyToScope')($scope);
+    var graphBuilder = createGraphBuilder($routeParams.pkgId, $routeParams.version, $http, applyToScope(progressChanged));
+    
+    $scope.graph = graphBuilder.graph;
+
+    graphBuilder.start
+      .then(applyToScope(graphLoaded))
+      .catch(applyToScope(errorOccured));
   }
 };
