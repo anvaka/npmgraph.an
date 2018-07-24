@@ -15,19 +15,7 @@ function graphViewer() {
       'mode': '='
     },
 
-    compile: function(tElement, tAttrs, transclude) {
-      var content = transclude(tElement.scope());
-      var nodeTemplate, linkTemplate;
-
-      angular.forEach(content, function(el) {
-        var name = el.localName;
-        if (name === 'node') {
-          nodeTemplate = el.innerHTML;
-        } else if (name === 'edge') {
-          linkTemplate = el.innerHTML;
-        }
-      });
-
+    compile: function() {
       return link;
 
       function link(scope, element) {
