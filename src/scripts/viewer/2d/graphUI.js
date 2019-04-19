@@ -2,7 +2,7 @@ var svg = require('simplesvg');
 var eventify = require('ngraph.events');
 var arrow = require('./arrow');
 var defaultNodeColor = '#CFCCDF';
-var defaultTextColor = '#484A5C';
+var defaultTextColor = '#70738f';
 
 module.exports = function(svgRoot) {
   var nodeUIModels = Object.create(null);
