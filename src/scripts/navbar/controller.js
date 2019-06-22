@@ -16,7 +16,7 @@ function navbarController($scope, $http, $routeParams, $location, $q) {
     if (pathParts) $scope.selectedPackage = decodeURIComponent(pathParts[1] || '');
   }
 
-  $scope.viewPackage = function (pkg, query) {
+  $scope.viewPackage = function (pkg) {
     var path = encodeURIComponent(pkg.id)
     if ($location.path().indexOf('/view/3d/') !== -1) {
       $location.path('/view/3d/' + path);
@@ -28,6 +28,15 @@ function navbarController($scope, $http, $routeParams, $location, $q) {
   $scope.getPackages = function(val) {
     if (val && val[0] === '@') {
       // scoped package, cannot suggest anything
+      return $q.when([{
+        id: val,
+        value: {
+          description: ''
+        }
+      }]);
+    }
+    if (val && val.match(/^https?:\/\//)) {
+      // http link - doesn't need a suggestion
       return $q.when([{
         id: val,
         value: {
