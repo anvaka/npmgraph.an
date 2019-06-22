@@ -1,4 +1,4 @@
 module.exports = {
   registryUrl: 'https://registry.npmjs.cf/',
-  autoCompleteUrl: 'https://npm-cors-proxy.herokuapp.com/registry/_design/scratch/_view/byField'
+  autoCompleteUrl: 'https://registry.npmjs.org/-/v1/search?size=10&from=0'
 }

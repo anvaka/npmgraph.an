@@ -46,14 +46,17 @@ function navbarController($scope, $http, $routeParams, $location, $q) {
     }
     return $http.get(registryUrl, {
       params: {
-        limit: 10,
-        reduce: false,
-        startkey: JSON.stringify(val)
+        text: JSON.stringify(val)
       }
     }).then(function(res){
       var packages = [];
-      angular.forEach(res.data.rows, function(pkg){
-        packages.push(pkg);
+      angular.forEach(res.data.objects, function(pkg){
+        packages.push({
+          id: pkg.package.name,
+          value: {
+            description: pkg.package.description
+          }
+        });
       });
       return packages;
     });
