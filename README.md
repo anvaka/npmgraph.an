@@ -2,10 +2,6 @@
 
 [Visualization of npm](http://npm.anvaka.com) shows dependency graph of an npm package.
 
-Note, due to https://github.com/anvaka/npmgraph.an/issues/1 the website talks
-with npm registry through [heroku-hosted proxy](https://github.com/anvaka/corsregistry).
-This may have negative impact on latency.
-
 # Screenshots
 
 Default view:
