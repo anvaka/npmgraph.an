@@ -14,19 +14,19 @@ var devServer = {
   root: './dist'
 };
 
-gulp.task('default', ['build', 'startStaticServer', 'watchChanges']);
-gulp.task('build', ['makeDist', 'runBrowserify', 'copyDist', 'compileLess']);
-
 gulp.task('runBrowserify', runBrowserify);
 gulp.task('compileLess', compileLess);
 gulp.task('makeDist', makeDist);
 gulp.task('copyDist', copyDist);
 gulp.task('watchChanges', watchChanges);
 gulp.task('startStaticServer', startStaticServer);
+gulp.task('build', gulp.series('makeDist', 'runBrowserify', 'copyDist', 'compileLess'));
+gulp.task('default', gulp.series('build', 'startStaticServer', 'watchChanges'));
 
-function runBrowserify() {
+function runBrowserify(done) {
   produceMainBundle();
   produce3DBundle();
+  done();
 }
 
 function produceMainBundle() {
@@ -55,7 +55,7 @@ function produce3DBundle() {
 
 }
 
-function compileLess() {
+function compileLess(done) {
   var less = require('gulp-less')('src/styles');
   less.on('error', function (err) {
     gutil.log(gutil.colors.red('Failed to compile less: '), gutil.colors.yellow(err.message));
@@ -64,16 +64,18 @@ function compileLess() {
 	gulp.src('src/styles/main.less')
 		.pipe(less)
 		.pipe(gulp.dest('dist/styles'));
+	done();
 }
 
-function makeDist() {
-  var fs = require('fs');
+function makeDist(done) {
+  // var fs = require('fs');
   if (!fs.existsSync('./dist')) {
     fs.mkdirSync('./dist');
   }
+  done();
 }
 
-function copyDist() {
+function copyDist(done) {
   var concat = require('gulp-concat');
 
   gulp.src('./src/index.html').pipe(gulp.dest('./dist'));
@@ -88,6 +90,7 @@ function copyDist() {
   gulp.src([
     './node_modules/twitter-bootstrap-3.0.0/fonts/*'])
       .pipe(gulp.dest('./dist/fonts/'));
+  done();
 }
 
 function watchChanges() {
