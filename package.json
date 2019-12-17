@@ -33,7 +33,7 @@
     "gulp-util": "^2.2.14",
     "tiny-lr": "0.0.5",
     "yargs": "^1.2.1",
-    "gulp": "^3.8.7"
+    "gulp": "^4.0.2"
   },
   "dependencies": {
     "an": "0.0.7",
