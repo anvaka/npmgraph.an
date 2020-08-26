@@ -1,6 +1,6 @@
 # npmgraph.an
 
-[Visualization of npm](http://npm.anvaka.com) shows dependency graph of an npm package.
+[Visualization of npm](https://npm.anvaka.com) shows dependency graph of an npm package.
 
 # Screenshots
 
@@ -18,13 +18,13 @@ Responsive view:
 
 # How it's done?
 
-[angular.js](https://angularjs.org/) + [browserify](http://browserify.org/) + [ngraph](https://github.com/anvaka/ngraph) => [gulp](http://gulpjs.com/) => http://npm.anvaka.com/
+[angular.js](https://angularjs.org/) + [browserify](https://browserify.org/) + [ngraph](https://github.com/anvaka/ngraph) => [gulp](https://gulpjs.com/) => https://npm.anvaka.com/
 
-The website is entirely hosted on [GitHub Pages](https://pages.github.com/), with continous deployment setup via [travis](https://github.com/anvaka/npmgraph.an/blob/master/.travis.yml).
+The website is entirely hosted on [GitHub Pages](https://pages.github.com/).
 
 The npm data is coming from `registry.npmjs.cf` and is collected by [npmgraphbuilder](https://github.com/anvaka/npmgraphbuilder) at real time.
 
-For CSS styles I'm using [twitter bootstrap](http://getbootstrap.com/css/) and [less](http://lesscss.org/).
+For CSS styles I'm using [twitter bootstrap](https://getbootstrap.com/css/) and [less](https://lesscss.org/).
 
 # npm rocks
 
@@ -45,7 +45,7 @@ This should start local dev server and serve npm visualization.
 
 Here I will try to list other projects that visualize npm. 
 
-* http://npm.broofa.com/ - renders dependency graph with direct acyclic graph layout alrogirthm.
+* https://npm.broofa.com/ - renders dependency graph with direct acyclic graph layout alrogirthm.
 * [galaxy](https://anvaka.github.io/pm/#/galaxy/npm?cx=-1345&cy=-7006&cz=-6553&lx=0.6217&ly=-0.6459&lz=0.3098&lw=0.3168&ml=150&s=1.75&l=1&v=2017-11-22T00-00-00Z) - 3D gallaxy simulator of npm packages.
 
 If you have other projects that you want to see here, please send me a pull request or a hint.
