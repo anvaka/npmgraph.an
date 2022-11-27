@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "an": "0.0.7",
-    "angular": "1.2.29",
+    "angular": "1.8.3",
     "js-md5": "^0.1.2",
     "ngraph.events": "0.0.3",
     "ngraph.graph": "0.0.10",
