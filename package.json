@@ -28,11 +28,11 @@
     "brfs": "^1.1.2",
     "browserify": "^3.33.0",
     "connect-livereload": "^0.3.2",
-    "express": "^3.5.1",
+    "express": "^4.18.2",
     "gulp-concat": "^2.2.0",
     "gulp-less": "^1.2.3",
     "gulp-util": "^2.2.14",
-    "tiny-lr": "0.0.5",
+    "tiny-lr": "2.0.0",
     "yargs": "^1.2.1",
     "gulp": "^4.0.2"
   },
