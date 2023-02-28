@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "brfs": "^1.1.2",
-    "browserify": "^3.33.0",
+    "browserify": "^17.0.0",
     "connect-livereload": "^0.3.2",
     "express": "^3.5.1",
     "gulp-concat": "^2.2.0",
