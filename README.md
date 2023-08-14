@@ -22,7 +22,7 @@ Responsive view:
 
 The website is entirely hosted on [GitHub Pages](https://pages.github.com/).
 
-The npm data is coming from `registry.npmjs.cf` and is collected by [npmgraphbuilder](https://github.com/anvaka/npmgraphbuilder) at real time.
+The npm data is coming from `registry.npmjs.org` and is collected by [npmgraphbuilder](https://github.com/anvaka/npmgraphbuilder) at real time.
 
 For CSS styles I'm using [twitter bootstrap](https://getbootstrap.com/css/) and [less](https://lesscss.org/).
 
