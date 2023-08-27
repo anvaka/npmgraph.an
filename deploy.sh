@@ -7,5 +7,5 @@ cp ./ops/CNAME ./dist
  git init
  git add .
  git commit -m "Deployed to Github Pages"
- git push --force git@github.com:anvaka/npmgraph.an.git master:gh-pages
+ git push --force git@github.com:anvaka/npmgraph.an.git main:gh-pages
 )
