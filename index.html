@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Visualization of npm dependencies</title>
+    <meta name="description" content="Visualization of npm dependencies">
+    <meta name="keywords" content="visualization, graph drawing, npm, npm graph, package licenses, anvaka, kashcha, andrei" />
+    <link rel="stylesheet" href="styles/main.css">
+  </head>
+  <body class='full'>
+    <div ng-view class='full'></div>
+    <navbar></navbar>
+
+    <div class='share' ng-controller='ShareController'>
+      <p><a href="https://github.com/anvaka/npmgraph.an">view source code</a></p>
+      <p><a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fgithub.com%2Fanvaka%2Fnpmgraph.an" ng-click='share("twitter", $event)'>share to twitter</a></p>
+      <p><a href="https://www.patreon.com/anvaka" target="_blank">become a patron</a></p>
+    </div>
+
+    <script type="text/javascript" charset="utf-8" src='external.min.js'></script>
+    <script type="text/javascript" charset="utf-8" src='bundle.js'></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-54546700-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+  </body>
+</html>
