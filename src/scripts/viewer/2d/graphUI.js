@@ -3,8 +3,11 @@ var eventify = require('ngraph.events');
 var arrow = require('./arrow');
 var defaultNodeColor = '#CFCCDF';
 var defaultTextColor = '#484A5C';
+var defaultRadius = 5;
+var minRadius = 0.25;
+var maxRadius = 30;
 
-module.exports = function(svgRoot) {
+module.exports = function(svgRoot, showSize) {
   var nodeUIModels = Object.create(null);
   var linkUIModels = Object.create(null);
 
@@ -45,7 +48,7 @@ module.exports = function(svgRoot) {
     node: function(node) {
       var ui = svg.compile([
         "<g>",
-        "<circle fill='{{nodeColor}}' r='5px'></circle>",
+        "<circle fill='{{nodeColor}}' r='{{nodeRadius}}px'></circle>",
         "<text fill='{{textColor}}' y='-10' x='-5'>{{text}}</text>",
         "</g>"
       ].join('\n'));
@@ -55,7 +58,8 @@ module.exports = function(svgRoot) {
         originalColor: defaultNodeColor,
         textColor: defaultTextColor,
         originalTextColor: defaultTextColor,
-        text: node.id
+        text: node.id,
+        nodeRadius: getNodeRadius(node)
       };
 
       nodeUIModels[node.id] = {
@@ -110,5 +114,13 @@ module.exports = function(svgRoot) {
     info.model.nodeColor = nodeColor;
     info.model.textColor = textColor;
     info.ui.dataSource(info.model);
+  }
+
+  function getNodeRadius(node) {
+    var radius = defaultRadius;
+    if (showSize && node.data && node.data.dist && node.data.dist.unpackedSize) {
+      radius = (node.data.dist.unpackedSize / 5000).toFixed(2);
+    }
+    return Math.min(Math.max(minRadius, radius), maxRadius);
   }
 };
