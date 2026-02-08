@@ -74,12 +74,17 @@ function fetchSuggestions() {
     return
   }
 
-  if (val[0] === '@' || val.match(/^https?:\/\//)) {
+  if (val.match(/^https?:\/\//)) {
     suggestions.value = [{ id: val, description: '' }]
     return
   }
 
-  fetch(autoCompleteUrl + '&text=' + encodeURIComponent(JSON.stringify(val)))
+  if (val.length < 2) {
+    suggestions.value = []
+    return
+  }
+
+  fetch(autoCompleteUrl + '&text=' + encodeURIComponent(val))
     .then(function (r) { return r.json() })
     .then(function (data) {
       suggestions.value = (data.objects || []).map(function (pkg) {
