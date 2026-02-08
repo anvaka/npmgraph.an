@@ -2,7 +2,6 @@
 rm -rf dist || exit 0;
 mkdir dist;
 npm run build
-cp ./ops/CNAME ./dist
 ( cd dist
  git init
  git add .
