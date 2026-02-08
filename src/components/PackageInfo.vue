@@ -18,7 +18,7 @@
           </select>
         </span>
         <p class="description">{{ selectedPackage.description }}</p>
-        <pre class="sh sh_sourceCode"><code>npm install {{ selectedPackage.name }}</code></pre>
+        <pre class="sh sh_sourceCode"><code>npm install {{ selectedPackage.name }}</code><button class="copy-btn" title="Copy to clipboard" @click="copyInstallCommand(selectedPackage.name)">{{ copyLabel }}</button></pre>
         <div class="maintainers">
           <h4>maintainers</h4>
           <div class="maintainersContainer">
@@ -33,7 +33,7 @@
       </div>
       <div v-else-if="selectedPackage">
         <h4>Remote dependency</h4>
-        <pre class="sh sh_sourceCode"><code>npm install {{ selectedPackage.id }}</code></pre>
+        <pre class="sh sh_sourceCode"><code>npm install {{ selectedPackage.id }}</code><button class="copy-btn" title="Copy to clipboard" @click="copyInstallCommand(selectedPackage.id)">{{ copyLabel }}</button></pre>
       </div>
     </div>
 
@@ -147,6 +147,8 @@ const allMaintainers = ref([])
 const allLicenses = ref([])
 const allNames = ref([])
 
+const copyLabel = ref('copy')
+let copyTimer = null
 let selectedLicenseRecord = null
 
 function onNodeSelected(node) {
@@ -222,6 +224,14 @@ function highlightNodes(record, e) {
   if (selectedLicenseRecord) selectedLicenseRecord.selected = true
 
   responsiveOpen.value = false
+}
+
+function copyInstallCommand(name) {
+  navigator.clipboard.writeText('npm install ' + name).then(function () {
+    copyLabel.value = 'copied!'
+    clearTimeout(copyTimer)
+    copyTimer = setTimeout(function () { copyLabel.value = 'copy' }, 1500)
+  })
 }
 
 defineExpose({ onNodeSelected, onGraphLoaded })

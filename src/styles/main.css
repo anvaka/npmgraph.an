@@ -348,6 +348,25 @@ pre {
   background-color: transparent;
   border: 0;
   color: var(--secondary-color);
+  position: relative;
+}
+
+.copy-btn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--border-color);
+  color: var(--primary-color);
+  border: none;
+  padding: 2px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.copy-btn:hover {
+  opacity: 1;
 }
 
 body {
