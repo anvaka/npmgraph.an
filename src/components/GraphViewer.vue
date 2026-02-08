@@ -64,6 +64,7 @@ function initRenderer() {
 
   var rootNode = graph.getNode(props.rootId)
   if (rootNode) {
+    graph.root = rootNode
     renderer.layout.pinNode(rootNode, true)
     highlightNode(rootNode)
   } else {

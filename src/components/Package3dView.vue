@@ -10,8 +10,9 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import buildGraph from '../graphBuilder.js'
+import buildGraph, { buildGraphFromJson } from '../graphBuilder.js'
 import getLocation from '../getLocation.js'
+import { uploadedPackageJson, includeDevDeps } from '../uploadStore.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -21,7 +22,17 @@ const canSwitchMode = ref(false)
 let renderer3d = null
 
 onMounted(() => {
-  var graphBuilder = buildGraph(route.params.pkgId, route.params.version)
+  var graphBuilder
+
+  if (route.params.pkgId === '~upload') {
+    if (!uploadedPackageJson.value) {
+      router.replace('/')
+      return
+    }
+    graphBuilder = buildGraphFromJson(uploadedPackageJson.value, { includeDevDeps: includeDevDeps.value })
+  } else {
+    graphBuilder = buildGraph(route.params.pkgId, route.params.version)
+  }
 
   graphBuilder.start.then(function () {
     canSwitchMode.value = true

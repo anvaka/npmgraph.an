@@ -33,7 +33,11 @@ function isRemote(version) {
   return typeof version === 'string' && (
     version.indexOf('git') === 0 ||
     version.indexOf('http') === 0 ||
-    version.indexOf('file') === 0
+    version.indexOf('file') === 0 ||
+    version.indexOf('github:') === 0 ||
+    version.indexOf('bitbucket:') === 0 ||
+    version.indexOf('gitlab:') === 0 ||
+    version.indexOf('/') !== -1 // GitHub shorthand: user/repo or user/repo#ref
   )
 }
 
@@ -41,106 +45,144 @@ function isHttp(name) {
   return typeof name === 'string' && name.match(/^https?:\/\//)
 }
 
-export default function buildGraph(pkgName, version, changed) {
-  var graph = createGraph({ uniqueLinkId: false })
-  var cache = Object.create(null)
-  var queue = []
-  var processed = Object.create(null)
+function fetchPackageData(ctx, work) {
+  var cacheKey = isRemote(work.version) ? work.name + work.version : work.name
+  var cached = ctx.cache[cacheKey]
+  if (cached) return Promise.resolve(cached)
 
-  if (!version) version = 'latest'
+  if (isRemote(work.version)) return Promise.resolve({})
 
-  queue.push({ name: pkgName, version: version, parent: null })
-
-  var promise = processQueue()
-
-  return {
-    graph: graph,
-    start: promise
-  }
-
-  function processQueue() {
-    if (typeof changed === 'function') {
-      changed(queue.length)
-    }
-
-    var work = queue.pop()
-    if (!work) return Promise.resolve(graph)
-
-    var cacheKey = isRemote(work.version) ? work.name + work.version : work.name
-    var cached = cache[cacheKey]
-    if (cached) {
-      return Promise.resolve(processResponse(work, cached))
-    }
-
-    if (isRemote(work.version)) {
-      return Promise.resolve(processResponse(work, {}))
-    }
-
-    var escapedName = escapeName(work.name)
-    if (!escapedName && isHttp(work.name)) {
-      return httpGet(work.name).then(function (pkgJSON) {
-        pkgJSON._id = pkgJSON.name + '@' + pkgJSON.version
-        var versions = {}
-        versions[pkgJSON.version] = pkgJSON
-        var data = { versions: versions }
-        return processResponse(work, data)
-      })
-    }
-
-    if (!escapedName) {
-      throw new Error('Escaped name is missing for ' + work.name)
-    }
-
-    return httpGet(registryUrl + escapedName).then(function (data) {
-      cache[cacheKey] = data
-      return processResponse(work, data)
+  var escapedName = escapeName(work.name)
+  if (!escapedName && isHttp(work.name)) {
+    return httpGet(work.name).then(function (pkgJSON) {
+      pkgJSON._id = pkgJSON.name + '@' + pkgJSON.version
+      var versions = {}
+      versions[pkgJSON.version] = pkgJSON
+      return { versions: versions }
     })
   }
 
-  function processResponse(work, packageJson) {
-    traverseDependencies(work, packageJson)
-
-    if (queue.length) {
-      return processQueue()
-    }
-
-    return graph
+  if (!escapedName) {
+    return Promise.reject(new Error('Escaped name is missing for ' + work.name))
   }
 
-  function traverseDependencies(work, packageJson) {
-    var version, pkg, id
+  return httpGet(registryUrl + escapedName).then(function (data) {
+    ctx.cache[cacheKey] = data
+    return data
+  })
+}
 
-    if (isRemote(work.version)) {
-      version = ''
-      pkg = packageJson
-      id = work.version
-    } else {
-      version = guessVersion(work.version, packageJson)
-      pkg = packageJson.versions[version]
-      id = pkg._id
-    }
+function processQueue(ctx) {
+  if (typeof ctx.changed === 'function') {
+    ctx.changed(ctx.queue.length)
+  }
 
-    var dependencies = pkg.dependencies
+  var work = ctx.queue.pop()
+  if (!work) return Promise.resolve(ctx.graph)
 
-    graph.beginUpdate()
-    graph.addNode(id, pkg)
+  return fetchPackageData(ctx, work)
+    .then(function (data) {
+      traverseDependencies(ctx, work, data)
+    })
+    .catch(function (err) {
+      ctx.errors.push({ name: work.name, version: work.version, message: err.message })
+    })
+    .then(function () {
+      return processQueue(ctx)
+    })
+}
 
-    if (work.parent && !graph.hasLink(work.parent, id)) {
-      graph.addLink(work.parent, id)
-    }
-    graph.endUpdate()
+function traverseDependencies(ctx, work, packageJson) {
+  var version, pkg, id
 
-    if (processed[id]) return
-    processed[id] = true
+  if (isRemote(work.version)) {
+    version = ''
+    pkg = packageJson
+    id = work.version
+  } else {
+    version = guessVersion(work.version, packageJson)
+    pkg = packageJson.versions[version]
+    id = pkg._id
+  }
 
-    if (dependencies) {
-      Object.keys(dependencies).forEach(function (name) {
-        queue.push({
-          name: name,
-          version: dependencies[name],
-          parent: id
-        })
+  var dependencies = pkg.dependencies
+
+  ctx.graph.beginUpdate()
+  ctx.graph.addNode(id, pkg)
+
+  if (work.parent && !ctx.graph.hasLink(work.parent, id)) {
+    ctx.graph.addLink(work.parent, id)
+  }
+  ctx.graph.endUpdate()
+
+  if (ctx.processed[id]) return
+  ctx.processed[id] = true
+
+  if (dependencies) {
+    Object.keys(dependencies).forEach(function (name) {
+      ctx.queue.push({
+        name: name,
+        version: dependencies[name],
+        parent: id
       })
-    }
+    })
+  }
+}
+
+export default function buildGraph(pkgName, version, changed) {
+  var ctx = {
+    graph: createGraph({ uniqueLinkId: false }),
+    cache: Object.create(null),
+    queue: [],
+    processed: Object.create(null),
+    errors: [],
+    changed: changed
+  }
+
+  if (!version) version = 'latest'
+
+  ctx.queue.push({ name: pkgName, version: version, parent: null })
+
+  var promise = processQueue(ctx)
+
+  return {
+    graph: ctx.graph,
+    start: promise,
+    errors: ctx.errors
+  }
+}
+
+export function buildGraphFromJson(packageJson, options, changed) {
+  var ctx = {
+    graph: createGraph({ uniqueLinkId: false }),
+    cache: Object.create(null),
+    queue: [],
+    processed: Object.create(null),
+    errors: [],
+    changed: changed
+  }
+
+  var name = packageJson.name || 'uploaded-project'
+  var version = packageJson.version || '0.0.0'
+  var id = name + '@' + version
+
+  ctx.graph.addNode(id, packageJson)
+  ctx.processed[id] = true
+
+  var deps = Object.assign({}, packageJson.dependencies)
+  if (options && options.includeDevDeps) {
+    Object.assign(deps, packageJson.devDependencies)
+  }
+
+  Object.keys(deps).forEach(function (depName) {
+    ctx.queue.push({ name: depName, version: deps[depName], parent: id })
+  })
+
+  var promise = processQueue(ctx)
+
+  return {
+    graph: ctx.graph,
+    start: promise,
+    errors: ctx.errors
   }
 }

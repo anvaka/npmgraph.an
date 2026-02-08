@@ -16,7 +16,7 @@
           @keydown.escape="closeSuggestions"
         >
         <span class="input-group-btn">
-          <button class="btn" type="submit">show</button>
+          <button class="btn" type="submit">visualize</button>
         </span>
         <ul v-if="suggestions.length > 0">
           <li
@@ -32,6 +32,26 @@
         </ul>
       </div>
     </form>
+
+    <div
+      class="upload-zone"
+      :class="{ 'has-file': uploadedPackageJson }"
+      @click="triggerFileInput"
+    >
+      <template v-if="!uploadedPackageJson">
+        <span class="upload-prompt">or drop <strong>package.json</strong> to graph local dependencies</span>
+      </template>
+      <template v-else>
+        <div class="staged-info">
+          <button class="staged-close" type="button" @click.stop="clearStaged">&times;</button>
+          <div class="staged-name">{{ uploadedPackageJson.name || 'uploaded-project' }}</div>
+          <label class="dev-deps-toggle" @click.stop>
+            <input type="checkbox" v-model="devDeps"> include devDependencies
+          </label>
+        </div>
+      </template>
+      <input ref="fileInput" type="file" accept=".json" hidden @change="onFileSelect">
+    </div>
   </div>
 </template>
 
@@ -39,6 +59,7 @@
 import { ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { autoCompleteUrl } from '../config.js'
+import { uploadedPackageJson, includeDevDeps, handleDroppedFile } from '../uploadStore.js'
 
 const router = useRouter()
 const route = useRoute()
@@ -47,6 +68,8 @@ const query = ref('')
 const suggestions = ref([])
 const activeIndex = ref(-1)
 const inputEl = ref(null)
+const fileInput = ref(null)
+const devDeps = ref(includeDevDeps.value)
 
 let debounceTimer = null
 
@@ -54,7 +77,16 @@ function syncQueryFromRoute() {
   const path = route.path
   if (path) {
     const pathParts = path.match(/\/view\/[23]d\/([^/]+)\/?/)
-    if (pathParts) query.value = decodeURIComponent(pathParts[1] || '')
+    if (pathParts) {
+      var pkgId = decodeURIComponent(pathParts[1] || '')
+      if (pkgId === '~upload') {
+        query.value = uploadedPackageJson.value
+          ? (uploadedPackageJson.value.name || 'uploaded-project')
+          : ''
+      } else {
+        query.value = pkgId
+      }
+    }
   }
 }
 
@@ -145,5 +177,51 @@ function navigateToPackage(name) {
   } else {
     router.push('/view/2d/' + encodedName)
   }
+}
+
+function triggerFileInput() {
+  if (!uploadedPackageJson.value) {
+    fileInput.value.click()
+  }
+}
+
+function onFileSelect(event) {
+  handleDroppedFile(event.target.files[0])
+  event.target.value = ''
+}
+
+function navigateToUpload() {
+  if (!uploadedPackageJson.value) return
+
+  includeDevDeps.value = devDeps.value
+  query.value = uploadedPackageJson.value.name || 'uploaded-project'
+  suggestions.value = []
+
+  var uploadPath = route.path.indexOf('/view/3d/') !== -1
+    ? '/view/3d/~upload'
+    : '/view/2d/~upload'
+
+  if (route.params.pkgId === '~upload') {
+    router.replace('/').then(function () {
+      router.replace(uploadPath)
+    })
+  } else {
+    router.push(uploadPath)
+  }
+}
+
+// Auto-visualize when a file is uploaded (from drop or file picker)
+watch(uploadedPackageJson, function (val) {
+  if (val) navigateToUpload()
+})
+
+// Auto-re-visualize when devDeps toggle changes
+watch(devDeps, function () {
+  if (uploadedPackageJson.value) navigateToUpload()
+})
+
+function clearStaged() {
+  uploadedPackageJson.value = null
+  devDeps.value = false
 }
 </script>

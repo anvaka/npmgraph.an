@@ -101,13 +101,44 @@ img {
   clear: both;
 }
 
-/* App styles */
-navbar,
-.navbar-component {
+/* Left panel: flex column holding navbar + sidebar */
+.left-panel {
   position: absolute;
-  left: 0;
   top: 0;
+  left: 0;
+  bottom: 0;
+  width: 315px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.left-panel:has(.sidebar-target > *) {
+  background: var(--scene-background);
+  border-right: 1px solid var(--border-color);
+  pointer-events: auto;
+}
+
+/* Navbar: natural height inside flex column */
+.navbar-component {
+  position: relative;
   z-index: 2;
+  flex-shrink: 0;
+  pointer-events: auto;
+  background: var(--scene-background);
+}
+
+/* Sidebar target: fills remaining space */
+.sidebar-target {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  pointer-events: none;
+}
+
+.sidebar-target:has(> *) {
+  pointer-events: auto;
 }
 
 .typeahead-container {
@@ -174,20 +205,96 @@ navbar,
   background: var(--button-color);
 }
 
+.upload-zone {
+  margin: 0 12px 8px;
+  padding: 4px 0;
+  text-align: center;
+  cursor: pointer;
+}
+
+.drop-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(54, 57, 74, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.drop-overlay-text {
+  font-size: 20px;
+  color: var(--primary-color);
+  border: 2px dashed var(--accent-color);
+  padding: 40px 60px;
+}
+
+.upload-zone.has-file {
+  cursor: default;
+  text-align: left;
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+}
+
+.upload-prompt {
+  font-size: 12px;
+  color: var(--secondary-color);
+}
+
+.upload-zone:hover .upload-prompt {
+  color: var(--primary-color);
+}
+
+.staged-info {
+  position: relative;
+  text-align: left;
+}
+
+.staged-name {
+  font-size: 13px;
+  color: var(--accent-color);
+  margin-bottom: 4px;
+}
+
+.dev-deps-toggle {
+  display: block;
+  font-size: 12px;
+  color: var(--secondary-color);
+  cursor: pointer;
+}
+
+.dev-deps-toggle input {
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.staged-close {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: transparent;
+  border: none;
+  color: var(--secondary-color);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.staged-close:hover {
+  color: var(--primary-color);
+}
+
 button.btn {
   border-radius: 0;
 }
 
+/* Sidebar content: normal flow inside sidebar-target */
 div.infoBox {
   background-color: var(--scene-background);
-  width: 315px;
-  position: absolute;
-  top: 0;
-  height: 100%;
-  padding: 52px 12px 12px 12px;
+  padding: 0 12px 12px 12px;
   color: var(--primary-color);
-  border-right: 1px solid var(--border-color);
-  overflow-y: auto;
 }
 
 div.infoBox a {
@@ -324,23 +431,52 @@ div.infoBox div.packageInfo .version {
 }
 
 .failed {
-  position: absolute;
-  width: 315px;
-  top: 57px;
   padding: 12px;
   color: var(--error-color);
 }
 
 .graph-progress {
-  position: absolute;
-  width: 315px;
-  top: 57px;
   padding: 12px;
   color: var(--primary-color);
 }
 
 .graph-progress span {
   color: var(--accent-color);
+}
+
+.graph-errors {
+  padding: 12px;
+  color: var(--secondary-color);
+  font-size: 12px;
+}
+
+.graph-errors h4 {
+  color: var(--error-color);
+  font-size: 13px;
+  margin: 0 0 6px;
+}
+
+.graph-errors ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.graph-errors li {
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.graph-errors .error-version {
+  color: var(--secondary-color);
+  margin-left: 6px;
+}
+
+.graph-errors .error-message {
+  color: var(--secondary-color);
+  font-size: 11px;
+  margin-top: 2px;
+  opacity: 0.7;
 }
 
 pre {
@@ -472,7 +608,15 @@ a.hide-info-box {
     padding-right: 7px;
   }
 
+  .left-panel {
+    width: 100%;
+    border-right: 0 !important;
+    background: none !important;
+    pointer-events: none;
+  }
+
   .navbar-component {
+    pointer-events: auto;
     background: var(--scene-background);
     right: 0;
   }
@@ -485,14 +629,26 @@ a.hide-info-box {
     width: auto;
   }
 
+  .upload-zone {
+    width: auto;
+  }
+
+  .sidebar-target {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: visible;
+  }
+
   div.infoBox {
+    pointer-events: auto;
     width: 100%;
-    top: inherit;
-    bottom: 16px;
     height: 56px;
     padding: 0 12px 12px 12px;
-    border-right: 0;
     overflow-y: hidden;
+    background: var(--scene-background);
+    margin-bottom: 16px;
   }
 
   div.infoBox .header a.selected {
@@ -505,9 +661,9 @@ a.hide-info-box {
   }
 
   div.infoBox.responsive-open {
-    top: 50px;
-    height: inherit;
-    bottom: 0;
+    flex: 1;
+    height: auto;
+    margin-bottom: 0;
     overflow-y: auto;
   }
 
@@ -524,9 +680,10 @@ a.hide-info-box {
   }
 
   .graph-progress {
-    top: inherit;
+    position: fixed;
     bottom: 27px;
     left: 50%;
     margin-left: -100px;
+    pointer-events: none;
   }
 }

@@ -7,21 +7,29 @@
       :highlight-request="highlightRequest"
       @node-selected="onNodeSelected"
     />
-    <PackageInfo
-      v-if="graph"
-      ref="packageInfoRef"
-      :graph="graph"
-      @highlight-node="onHighlightNode"
-    />
+    <Teleport to="#sidebar-target">
+      <PackageInfo
+        v-if="graph"
+        ref="packageInfoRef"
+        :graph="graph"
+        @highlight-node="onHighlightNode"
+      />
 
-    <div v-if="showError" class="failed">
-      <h4>{{ error }}</h4>
-      <pre>{{ errorData }}</pre>
-    </div>
+      <div v-if="errors.length" class="graph-errors">
+        <h4>Failed to resolve {{ errors.length }} package{{ errors.length > 1 ? 's' : '' }}:</h4>
+        <ul>
+          <li v-for="(err, i) in errors" :key="i">
+            <strong>{{ err.name }}</strong>
+            <span v-if="err.version" class="error-version">{{ err.version }}</span>
+            <div class="error-message">{{ err.message }}</div>
+          </li>
+        </ul>
+      </div>
 
-    <div v-if="showProgress" class="graph-progress">
-      <h4>Remaining packages: <span>{{ progress }}</span></h4>
-    </div>
+      <div v-if="showProgress" class="graph-progress">
+        <h4>Remaining packages: <span>{{ progress }}</span></h4>
+      </div>
+    </Teleport>
 
     <div v-if="showSwitchMode" class="switchMode d2d">
       <button class="btn" type="button" @click="switchMode">Show 3D</button>
@@ -30,10 +38,11 @@
 </template>
 
 <script setup>
-import { ref, shallowRef, markRaw, onMounted } from 'vue'
+import { ref, shallowRef, reactive, markRaw, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import buildGraph from '../graphBuilder.js'
+import buildGraph, { buildGraphFromJson } from '../graphBuilder.js'
 import getLocation from '../getLocation.js'
+import { uploadedPackageJson, includeDevDeps } from '../uploadStore.js'
 import GraphViewer from './GraphViewer.vue'
 import PackageInfo from './PackageInfo.vue'
 
@@ -44,52 +53,47 @@ const graph = shallowRef(null)
 const rootId = ref('')
 const showProgress = ref(true)
 const progress = ref(0)
-const showError = ref(false)
-const error = ref('')
-const errorData = ref('')
+const errors = reactive([])
 const showSwitchMode = ref(false)
 const highlightRequest = shallowRef(null)
 const packageInfoRef = ref(null)
 
 onMounted(() => {
-  rootId.value = route.params.pkgId
+  var graphBuilder
 
-  var graphBuilder = buildGraph(
-    route.params.pkgId,
-    route.params.version,
-    progressChanged
-  )
+  if (route.params.pkgId === '~upload') {
+    if (!uploadedPackageJson.value) {
+      router.replace('/')
+      return
+    }
+    var pkg = uploadedPackageJson.value
+    rootId.value = (pkg.name || 'uploaded-project') + '@' + (pkg.version || '0.0.0')
+    graphBuilder = buildGraphFromJson(pkg, { includeDevDeps: includeDevDeps.value }, progressChanged)
+  } else {
+    rootId.value = route.params.pkgId
+    graphBuilder = buildGraph(route.params.pkgId, route.params.version, progressChanged)
+  }
 
   graph.value = markRaw(graphBuilder.graph)
 
   graphBuilder.start
-    .then(graphLoaded)
-    .catch(errorOccurred)
+    .then(function () {
+      graphLoaded(graphBuilder.errors)
+    })
 })
 
 function progressChanged(queueLength) {
   progress.value = queueLength
 }
 
-function errorOccurred(err) {
-  showError.value = true
-  showProgress.value = false
-
-  if (err.status) {
-    error.value = 'error: ' + err.status
-    errorData.value = JSON.stringify({
-      url: err.config && err.config.url,
-      method: err.config && err.config.method
-    }, null, 2)
-  } else {
-    error.value = 'Error'
-    errorData.value = JSON.stringify({ message: err.message }, null, 2)
-  }
-}
-
-function graphLoaded() {
+function graphLoaded(buildErrors) {
   showSwitchMode.value = true
   showProgress.value = false
+
+  if (buildErrors && buildErrors.length) {
+    errors.push.apply(errors, buildErrors)
+  }
+
   if (packageInfoRef.value) {
     packageInfoRef.value.onGraphLoaded(graph.value)
   }
