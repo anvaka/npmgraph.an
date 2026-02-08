@@ -18,13 +18,11 @@ Responsive view:
 
 # How it's done?
 
-[angular.js](https://angularjs.org/) + [browserify](https://browserify.org/) + [ngraph](https://github.com/anvaka/ngraph) => [gulp](https://gulpjs.com/) => https://npm.anvaka.com/
+[Vue 3](https://vuejs.org/) + [Vite](https://vite.dev/) + [ngraph](https://github.com/anvaka/ngraph) => https://npm.anvaka.com/
 
 The website is entirely hosted on [GitHub Pages](https://pages.github.com/).
 
-The npm data is coming from `registry.npmjs.org` and is collected by [npmgraphbuilder](https://github.com/anvaka/npmgraphbuilder) at real time.
-
-For CSS styles I'm using [twitter bootstrap](https://getbootstrap.com/css/) and [less](https://lesscss.org/).
+The npm data is coming from `registry.npmjs.org` and is collected at real time.
 
 # npm rocks
 
@@ -35,8 +33,8 @@ All modules of this application are provided by [npm](https://github.com/anvaka/
 ```
 git clone https://github.com/anvaka/npmgraph.an.git
 cd npmgraph.an
-npm i
-npm start
+npm install
+npm run dev
 ```
 
 This should start local dev server and serve npm visualization.
