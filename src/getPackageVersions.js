@@ -19,8 +19,12 @@ export default function getPackageVersions(packageName) {
   }
 
   return fetch(registryUrl + escapedName)
-    .then(function (r) { return r.json() })
+    .then(function (r) {
+      if (!r.ok) return null
+      return r.json()
+    })
     .then(function (data) {
+      if (!data || !data.versions) return null
       var versions = Object.keys(data.versions)
       cache[packageName] = versions
       return versions

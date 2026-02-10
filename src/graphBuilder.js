@@ -131,7 +131,7 @@ function traverseDependencies(ctx, work, packageJson) {
 
 export default function buildGraph(pkgName, version, changed) {
   var ctx = {
-    graph: createGraph({ uniqueLinkId: false }),
+    graph: createGraph(),
     cache: Object.create(null),
     queue: [],
     processed: Object.create(null),
@@ -143,18 +143,16 @@ export default function buildGraph(pkgName, version, changed) {
 
   ctx.queue.push({ name: pkgName, version: version, parent: null })
 
-  var promise = processQueue(ctx)
-
   return {
     graph: ctx.graph,
-    start: promise,
+    start: function () { return processQueue(ctx) },
     errors: ctx.errors
   }
 }
 
 export function buildGraphFromJson(packageJson, options, changed) {
   var ctx = {
-    graph: createGraph({ uniqueLinkId: false }),
+    graph: createGraph(),
     cache: Object.create(null),
     queue: [],
     processed: Object.create(null),
@@ -178,11 +176,9 @@ export function buildGraphFromJson(packageJson, options, changed) {
     ctx.queue.push({ name: depName, version: deps[depName], parent: id })
   })
 
-  var promise = processQueue(ctx)
-
   return {
     graph: ctx.graph,
-    start: promise,
+    start: function () { return processQueue(ctx) },
     errors: ctx.errors
   }
 }

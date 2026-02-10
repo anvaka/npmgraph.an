@@ -147,6 +147,8 @@ function selectCurrent() {
   if (activeIndex.value >= 0 && activeIndex.value < suggestions.value.length) {
     selectPackage(suggestions.value[activeIndex.value])
   } else if (query.value.trim()) {
+    suggestions.value = []
+    activeIndex.value = -1
     navigateToPackage(query.value.trim())
   }
 }
@@ -171,6 +173,7 @@ function closeSuggestions() {
 }
 
 function navigateToPackage(name) {
+  clearStaged()
   var encodedName = encodeURIComponent(name)
   if (route.path.indexOf('/view/3d/') !== -1) {
     router.push('/view/3d/' + encodedName)

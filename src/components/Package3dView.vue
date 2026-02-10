@@ -34,7 +34,7 @@ onMounted(() => {
     graphBuilder = buildGraph(route.params.pkgId, route.params.version)
   }
 
-  graphBuilder.start.then(function () {
+  graphBuilder.start().then(function () {
     canSwitchMode.value = true
   })
 

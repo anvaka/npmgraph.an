@@ -1,12 +1,17 @@
 import createThreeRenderer from 'ngraph.three'
 import three2stl from 'three2stl'
-import createPhysicsSettings from './physics.js'
 
 export default function create3DRenderer(graph, container) {
   var renderer = createThreeRenderer(graph, {
     container: container,
     interactive: true,
-    physicsSettings: createPhysicsSettings()
+    physicsSettings: {
+      springLength: 80,
+      springCoeff: 0.0002,
+      gravity: -1.2,
+      theta: 0.8,
+      dragCoeff: 0.02
+    }
   })
 
   var THREE = renderer.THREE

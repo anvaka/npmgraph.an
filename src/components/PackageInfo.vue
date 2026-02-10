@@ -1,8 +1,12 @@
 <template>
-  <div v-show="graphLoaded" class="infoBox" :class="{ 'responsive-open': responsiveOpen }">
+  <div v-show="graphLoaded" ref="infoBoxEl" class="infoBox" :class="{ 'responsive-open': responsiveOpen }">
     <a href="#" class="hide-info-box" @click.prevent="responsiveOpen = false">show graph</a>
     <div class="header">
       <a href="#" :class="{ selected: packageInfoVisible }" @click.prevent="switchInfoMode('package', true)">package info</a>
+      <span v-if="showActions" class="infoBox-actions">
+        <a href="#" @click.prevent="$emit('toggle-layout')">{{ layoutRunning ? 'pause' : 'resume' }}</a>
+        <a href="#" @click.prevent="$emit('switch-mode')">3d</a>
+      </span>
       <a href="#" :class="{ selected: graphInfoVisible }" class="last" @click.prevent="switchInfoMode('graph', true)">graph info</a>
       <div class="clearfix"></div>
     </div>
@@ -29,6 +33,18 @@
             </div>
           </div>
           <div class="clearfix"></div>
+        </div>
+        <div v-if="nodeVulns.length" class="node-vulnerabilities">
+          <h4>vulnerabilities</h4>
+          <div v-for="vuln in nodeVulns" :key="vuln.id" class="vuln-item">
+            <div class="vuln-header">
+              <span class="vuln-severity" :style="{ background: vuln.color }">{{ vuln.severityLabel }}</span>
+              <a :href="'https://osv.dev/vulnerability/' + vuln.id" target="_blank">{{ vuln.id }}</a>
+            </div>
+            <div v-if="vuln.summary" class="vuln-summary">{{ vuln.summary }}</div>
+            <div v-if="vuln.aliases.length" class="vuln-aliases">{{ vuln.aliases.join(', ') }}</div>
+            <div v-if="vuln.fixedVersion" class="vuln-fix">Fixed in: {{ vuln.fixedVersion }}</div>
+          </div>
         </div>
       </div>
       <div v-else-if="selectedPackage">
@@ -108,12 +124,32 @@
         </div>
         <div class="clearfix"></div>
       </div>
+      <div v-if="vulnMap">
+        <hr>
+        <div class="all-licenses">
+          <h4>vulnerabilities</h4>
+          <div v-if="allVulnerabilities.length" class="license-container">
+            <a
+              v-for="sev in allVulnerabilities"
+              :key="sev.name"
+              class="license-row"
+              href="#"
+              :class="{ selected: sev.selected }"
+              @click.prevent="highlightNodes(sev, $event)"
+            >
+              <span :style="{ color: sev.color }">{{ sev.name }}</span>
+              <span class="last">{{ sev.count }}</span>
+            </a>
+          </div>
+          <p v-else class="no-vulns">No known vulnerabilities found</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import toGravatar from '../toGravatar.js'
 import getPackageVersions from '../getPackageVersions.js'
@@ -121,20 +157,37 @@ import getLocation from '../getLocation.js'
 import getAllLicenses from '../licenses.js'
 import getAllMaintainers from '../maintainers.js'
 import getAllNames from '../names.js'
+import { getVulnSummary } from '../vulnerabilities.js'
 
 const props = defineProps({
-  graph: { type: Object, required: true }
+  graph: { type: Object, required: true },
+  showActions: { type: Boolean, default: false },
+  layoutRunning: { type: Boolean, default: true },
+  vulnMap: { type: Object, default: null }
 })
 
-const emit = defineEmits(['highlight-node'])
+const emit = defineEmits(['highlight-node', 'toggle-layout', 'switch-mode'])
 
 const route = useRoute()
 const router = useRouter()
 
+const infoBoxEl = ref(null)
 const graphLoaded = ref(false)
 const packageInfoVisible = ref(true)
 const graphInfoVisible = ref(false)
 const responsiveOpen = ref(false)
+
+watch(responsiveOpen, (open) => {
+  if (!open && infoBoxEl.value) {
+    infoBoxEl.value.scrollTop = 0
+  }
+})
+
+watch(() => props.vulnMap, (vulnMap) => {
+  if (vulnMap && selectedNodeId) {
+    nodeVulns.value = vulnMap.get(selectedNodeId) || []
+  }
+})
 
 const selectedPackage = ref(null)
 const nodeMaintainers = ref([])
@@ -151,7 +204,13 @@ const copyLabel = ref('copy')
 let copyTimer = null
 let selectedLicenseRecord = null
 
+const allVulnerabilities = ref([])
+const totalVulnCount = ref(0)
+const nodeVulns = ref([])
+let selectedNodeId = null
+
 function onNodeSelected(node) {
+  if (!node) return
   selectNode(node)
   switchInfoMode('package', false)
 }
@@ -176,6 +235,7 @@ function selectNode(node) {
   }
 
   selectedPackage.value = data
+  selectedNodeId = node.id
   versions.value = null
 
   if (data.maintainers && data.maintainers.length) {
@@ -187,11 +247,29 @@ function selectNode(node) {
   if (!data.remote) {
     var name = data.name
     getPackageVersions(name).then(function (v) {
-      if (selectedPackage.value && selectedPackage.value.name === name) {
+      if (v && selectedPackage.value && selectedPackage.value.name === name) {
         versions.value = v
         selectedVersion.value = data.version
       }
     })
+  }
+
+  // Look up vulnerabilities for this node
+  if (props.vulnMap) {
+    nodeVulns.value = props.vulnMap.get(node.id) || []
+  } else {
+    nodeVulns.value = []
+  }
+}
+
+function onVulnDataLoaded(vulnMap) {
+  allVulnerabilities.value = getVulnSummary(vulnMap)
+  totalVulnCount.value = 0
+  allVulnerabilities.value.forEach(function (r) { totalVulnCount.value += r.count })
+
+  // Update nodeVulns for current selection
+  if (selectedNodeId && vulnMap) {
+    nodeVulns.value = vulnMap.get(selectedNodeId) || []
   }
 }
 
@@ -234,5 +312,5 @@ function copyInstallCommand(name) {
   })
 }
 
-defineExpose({ onNodeSelected, onGraphLoaded })
+defineExpose({ onNodeSelected, onGraphLoaded, onVulnDataLoaded })
 </script>
