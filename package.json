@@ -29,7 +29,7 @@
     "js-md5": "^0.1.2",
     "ngraph.graph": "20.1.1",
     "ngraph.svg": "0.11.0",
-    "ngraph.three": "0.0.11",
+    "ngraph.three": "0.0.16",
     "semver": "^7.6.0",
     "three2stl": "0.0.1",
     "vue": "^3.5.0",
