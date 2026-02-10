@@ -552,7 +552,7 @@ body {
   height: 100%;
 }
 
-.graphView canvas { pointer-events: none; }
+.graphView.d2d canvas { pointer-events: none; }
 
 /* Node and edge base styles for ngraph.svg */
 .node { cursor: pointer; }
@@ -587,6 +587,7 @@ body {
   left: 30px;
   display: flex;
   gap: 8px;
+  z-index: 2;
 }
 
 .switchMode.d2d {

@@ -295,10 +295,11 @@ function initRenderer() {
   })
   layout.start()
 
-  // Pin root node
+  // Pin root node at origin
   var rootNode = graph.getNode(props.rootId)
   if (rootNode) {
     graph.root = rootNode
+    layout.setNodePosition(props.rootId, 0, 0)
     layout.pinNode(props.rootId)
   } else {
     graph.on('changed', pinRootNode)
@@ -363,6 +364,7 @@ function initRenderer() {
       var change = changes[i]
       if (change.changeType === 'add' && change.node) {
         graph.root = change.node
+        layout.setNodePosition(change.node.id, 0, 0)
         layout.pinNode(change.node.id)
         graph.off('changed', pinRootNode)
         break
