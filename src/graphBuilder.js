@@ -129,6 +129,14 @@ function traverseDependencies(ctx, work, packageJson) {
   }
 }
 
+export function parsePackageId(pkgId) {
+  var idx = pkgId.indexOf('@', pkgId.charAt(0) === '@' ? 1 : 0)
+  if (idx > 0) {
+    return { name: pkgId.slice(0, idx), version: pkgId.slice(idx + 1) }
+  }
+  return { name: pkgId, version: '' }
+}
+
 export default function buildGraph(pkgName, version, changed) {
   var ctx = {
     graph: createGraph(),

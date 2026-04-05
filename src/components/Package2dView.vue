@@ -53,7 +53,7 @@
 <script setup>
 import { ref, shallowRef, reactive, markRaw, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import buildGraph, { buildGraphFromJson } from '../graphBuilder.js'
+import buildGraph, { buildGraphFromJson, parsePackageId } from '../graphBuilder.js'
 import getLocation from '../getLocation.js'
 import { uploadedPackageJson, includeDevDeps } from '../uploadStore.js'
 import { scanVulnerabilities } from '../vulnerabilities.js'
@@ -88,8 +88,15 @@ onMounted(() => {
     rootId.value = (pkg.name || 'uploaded-project') + '@' + (pkg.version || '0.0.0')
     pendingGraphBuilder = buildGraphFromJson(pkg, { includeDevDeps: includeDevDeps.value }, progressChanged)
   } else {
-    rootId.value = route.params.pkgId
-    pendingGraphBuilder = buildGraph(route.params.pkgId, route.params.version, progressChanged)
+    var pkgId = route.params.pkgId
+    var version = route.params.version
+    if (!version) {
+      var parsed = parsePackageId(pkgId)
+      pkgId = parsed.name
+      version = parsed.version || undefined
+    }
+    rootId.value = pkgId
+    pendingGraphBuilder = buildGraph(pkgId, version, progressChanged)
   }
 
   graph.value = markRaw(pendingGraphBuilder.graph)

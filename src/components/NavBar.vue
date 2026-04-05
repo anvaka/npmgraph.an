@@ -59,6 +59,7 @@
 import { ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { autoCompleteUrl } from '../config.js'
+import { parsePackageId } from '../graphBuilder.js'
 import { uploadedPackageJson, includeDevDeps, handleDroppedFile } from '../uploadStore.js'
 
 const router = useRouter()
@@ -76,15 +77,16 @@ let debounceTimer = null
 function syncQueryFromRoute() {
   const path = route.path
   if (path) {
-    const pathParts = path.match(/\/view\/[23]d\/([^/]+)\/?/)
+    const pathParts = path.match(/\/view\/[23]d\/([^/]+)(?:\/([^/]+))?\/?/)
     if (pathParts) {
       var pkgId = decodeURIComponent(pathParts[1] || '')
+      var version = decodeURIComponent(pathParts[2] || '')
       if (pkgId === '~upload') {
         query.value = uploadedPackageJson.value
           ? (uploadedPackageJson.value.name || 'uploaded-project')
           : ''
       } else {
-        query.value = pkgId
+        query.value = version ? pkgId + '@' + version : pkgId
       }
     }
   }
@@ -174,12 +176,13 @@ function closeSuggestions() {
 
 function navigateToPackage(name) {
   clearStaged()
-  var encodedName = encodeURIComponent(name)
-  if (route.path.indexOf('/view/3d/') !== -1) {
-    router.push('/view/3d/' + encodedName)
-  } else {
-    router.push('/view/2d/' + encodedName)
+  var parsed = parsePackageId(name)
+  var path = route.path.indexOf('/view/3d/') !== -1 ? '/view/3d/' : '/view/2d/'
+  path += encodeURIComponent(parsed.name)
+  if (parsed.version) {
+    path += '/' + encodeURIComponent(parsed.version)
   }
+  router.push(path)
 }
 
 function triggerFileInput() {
