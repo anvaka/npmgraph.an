@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { ref, shallowRef, reactive, markRaw, onMounted } from 'vue'
+import { ref, shallowRef, reactive, markRaw, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import buildGraph, { buildGraphFromJson, parsePackageId } from '../graphBuilder.js'
 import getLocation from '../getLocation.js'
@@ -77,6 +77,18 @@ const vulnScanning = ref(false)
 const vulnProgress = ref('')
 
 var pendingGraphBuilder = null
+let activeGraphBuilder = null
+
+onUnmounted(() => {
+  if (pendingGraphBuilder) {
+    pendingGraphBuilder.cancel()
+    pendingGraphBuilder = null
+  }
+  if (activeGraphBuilder) {
+    activeGraphBuilder.cancel()
+    activeGraphBuilder = null
+  }
+})
 
 onMounted(() => {
   if (route.params.pkgId === '~upload') {
@@ -106,8 +118,10 @@ function onLayoutReady() {
   if (!pendingGraphBuilder) return
   var graphBuilder = pendingGraphBuilder
   pendingGraphBuilder = null
+  activeGraphBuilder = graphBuilder
 
   graphBuilder.start().then(function () {
+    if (activeGraphBuilder !== graphBuilder) return // view was unmounted mid-build
     graphLoaded(graphBuilder.errors)
   })
 }
