@@ -27,6 +27,11 @@ let maxBfsDistance = 1
 let bfsDirty = true
 let bfsChangeListener = null
 let hasInitialFit = false
+// While the graph streams in, the layout update callback fires every animation
+// frame. Recomputing BFS over the whole graph on every frame is wasteful, so
+// intermediate recomputes are throttled (a final exact one runs on stabilize).
+let lastBfsRecompute = 0
+const BFS_RECOMPUTE_INTERVAL = 150
 
 onMounted(() => {
   if (props.graph && container.value) {
@@ -108,6 +113,8 @@ function findRootId() {
 function recomputeDistances() {
   var graph = props.graph
   if (!graph) return
+
+  lastBfsRecompute = performance.now()
 
   var rootId = findRootId()
   if (!rootId) return
@@ -270,6 +277,10 @@ function initRenderer() {
     layeredLayout: false,
     onStabilized: () => {
       layoutRunning.value = false
+      if (bfsDirty) {
+        recomputeDistances() // exact final importance
+        if (scene) scene.requestRender()
+      }
       if (!hasInitialFit) {
         hasInitialFit = true
         layout.getBounds().then(function (bounds) {
@@ -284,7 +295,9 @@ function initRenderer() {
 
   layout.onUpdate((positions) => {
     if (!layoutRunning.value) layoutRunning.value = true
-    if (bfsDirty) recomputeDistances()
+    if (bfsDirty && performance.now() - lastBfsRecompute > BFS_RECOMPUTE_INTERVAL) {
+      recomputeDistances()
+    }
     nodeCol.syncPositions(positions)
     edgeCol.syncPositions(positions)
     scene.requestRender()
