@@ -1,4 +1,6 @@
 #!/bin/bash
+# Stop at the first error, so that a failed build is never pushed.
+set -e
 rm -rf dist || exit 0;
 mkdir dist;
 npm run build
