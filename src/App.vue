@@ -14,6 +14,7 @@
       <p><a href="https://github.com/anvaka/npmgraph.an">view source code</a></p>
       <p><a href="#" @click.prevent="shareTwitter">share to twitter</a></p>
       <p><a href="https://www.patreon.com/anvaka" target="_blank">become a patron</a></p>
+      <p><a href="https://anvaka.com" target="_blank">my other projects</a></p>
     </div>
     <div v-if="isDragOver" class="drop-overlay">
       <div class="drop-overlay-text">Drop <strong>package.json</strong> to graph dependencies</div>
