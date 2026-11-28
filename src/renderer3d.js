@@ -12,6 +12,12 @@ var EDGE_COLOR = 0x2A5A6A
 var DIMMED_FACTOR = 0.03
 var LAYOUT_STEPS_PER_FRAME = 6
 var GLOW_WIDTH = 1.8
+// Growth quantum for GPU buffers. Rebuilding meshes used to allocate brand new
+// InstancedMesh/BufferGeometry on every graph change (up to once per animation
+// frame while the dependency tree streams in). Buffers now grow geometrically
+// and are only re-created when the graph outgrows the current capacity.
+var INITIAL_NODE_CAPACITY = 64
+var INITIAL_EDGE_VERTEX_CAPACITY = 128
 
 // Billboard-quad glow: each edge → a camera-facing quad with soft edges
 var GLOW_VERTEX = [
@@ -127,8 +133,11 @@ export default function create3DRenderer(graph, container) {
   var nodeIds = []
   var nodeIndexById = Object.create(null)
   var instancedMesh = null
+  var nodeCapacity = 0
+  var sphereMat = null
   var edgeGeometry = null
   var edgeLine = null
+  var edgeMat = null
   var layoutRunning = true
   var animFrameId = null
   var disposed = false
@@ -173,12 +182,15 @@ export default function create3DRenderer(graph, container) {
 
   var pointerDownPos = null
 
-  function findRootId() {
+  // Returns the cached root id, re-scanning only if it disappeared. (The
+  // previous version iterated every graph node on every rebuild.)
+  function ensureRootId() {
+    if (rootId && graph.getNode(rootId)) return
     var firstNode = null
     graph.forEachNode(function (node) {
       if (!firstNode) firstNode = node.id
     })
-    return firstNode
+    rootId = firstNode
   }
 
   function stripVersion(nodeId) {
@@ -186,7 +198,9 @@ export default function create3DRenderer(graph, container) {
     return atIdx > 0 ? nodeId.substring(0, atIdx) : nodeId
   }
 
-  var sharedSphereGeo = new THREE.IcosahedronGeometry(2.0, 4)
+  // Detail 3 gives 1,280 triangles per node instead of 5,120 (4x fewer), with
+  // no visible difference at the sizes nodes are actually rendered.
+  var sharedSphereGeo = new THREE.IcosahedronGeometry(2.0, 3)
 
   // --- Glow edge system (billboard quads) ---
 
@@ -323,19 +337,74 @@ export default function create3DRenderer(graph, container) {
     layout.pinNode(rootNode, true)
   }
 
-  function rebuildMeshes() {
-    rootId = findRootId()
-    pinRootNode()
+  function ensureNodeCapacity(nodeCount) {
+    if (instancedMesh && nodeCount <= nodeCapacity) return
+
+    var newCapacity = Math.max(INITIAL_NODE_CAPACITY, nodeCapacity)
+    while (newCapacity < nodeCount) newCapacity *= 2
+    nodeCapacity = newCapacity
+
+    if (!sphereMat) {
+      sphereMat = new THREE.MeshPhysicalMaterial({
+        color: 0xFFFFFF,
+        roughness: 0.15,
+        metalness: 0.0,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.05,
+        envMapIntensity: 0.5
+      })
+    }
 
     if (instancedMesh) {
       scene.remove(instancedMesh)
-      instancedMesh.material.dispose()
+      instancedMesh.dispose() // frees instance buffers; shared geometry/material survive
     }
+
+    instancedMesh = new THREE.InstancedMesh(sharedSphereGeo, sphereMat, nodeCapacity)
+    instancedMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage)
+    instancedMesh.count = 0
+    // Large bounding sphere so raycaster broadphase never rejects
+    instancedMesh.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 100000)
+    scene.add(instancedMesh)
+  }
+
+  function ensureEdgeCapacity(linkCount) {
+    var requiredVertices = linkCount * 2
+    var current = edgeGeometry ? edgeGeometry.getAttribute('position').count : 0
+    if (edgeLine && requiredVertices <= current) return
+
+    var vertexCapacity = Math.max(INITIAL_EDGE_VERTEX_CAPACITY, current)
+    while (vertexCapacity < requiredVertices) vertexCapacity *= 2
+
+    if (edgeGeometry) edgeGeometry.dispose()
+    edgeGeometry = new THREE.BufferGeometry()
+    edgeGeometry.setAttribute('position',
+      new THREE.BufferAttribute(new Float32Array(vertexCapacity * 3), 3)
+        .setUsage(THREE.DynamicDrawUsage))
+    edgeGeometry.setDrawRange(0, 0)
+
+    if (!edgeMat) {
+      edgeMat = new THREE.LineBasicMaterial({
+        color: EDGE_COLOR,
+        transparent: true,
+        opacity: 0.5
+      })
+    }
+
     if (edgeLine) {
-      scene.remove(edgeLine)
-      edgeGeometry.dispose()
-      edgeLine.material.dispose()
+      edgeLine.geometry = edgeGeometry
+    } else {
+      edgeLine = new THREE.LineSegments(edgeGeometry, edgeMat)
+      // Geometry (and its bounding sphere) persists across graph changes, so
+      // don't let three cull edges based on a stale bounding sphere.
+      edgeLine.frustumCulled = false
+      scene.add(edgeLine)
     }
+  }
+
+  function rebuildMeshes() {
+    ensureRootId()
+    pinRootNode()
 
     nodeIds = []
     nodeIndexById = Object.create(null)
@@ -345,18 +414,15 @@ export default function create3DRenderer(graph, container) {
     })
 
     var nodeCount = nodeIds.length
-    if (nodeCount === 0) return
+    if (nodeCount === 0) {
+      if (instancedMesh) instancedMesh.count = 0
+      if (edgeGeometry) edgeGeometry.setDrawRange(0, 0)
+      return
+    }
 
-    var sphereMat = new THREE.MeshPhysicalMaterial({
-      color: 0xFFFFFF,
-      roughness: 0.15,
-      metalness: 0.0,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.05,
-      envMapIntensity: 0.5
-    })
-    instancedMesh = new THREE.InstancedMesh(sharedSphereGeo, sphereMat, nodeCount)
-    instancedMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage)
+    // Grow GPU buffers only when the graph outgrows them (amortized O(1)
+    // instead of full reallocation on every added package).
+    ensureNodeCapacity(nodeCount)
 
     for (var i = 0; i < nodeCount; i++) {
       var id = nodeIds[i]
@@ -368,25 +434,13 @@ export default function create3DRenderer(graph, container) {
       dummy.updateMatrix()
       instancedMesh.setMatrixAt(i, dummy.matrix)
     }
-    instancedMesh.instanceColor.needsUpdate = true
-    scene.add(instancedMesh)
-
-    // Large bounding sphere so raycaster broadphase never rejects
-    instancedMesh.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 100000)
+    instancedMesh.count = nodeCount
+    if (instancedMesh.instanceColor) instancedMesh.instanceColor.needsUpdate = true
+    instancedMesh.instanceMatrix.needsUpdate = true
 
     var linkCount = graph.getLinksCount()
-    var edgePositions = new Float32Array(linkCount * 6)
-    edgeGeometry = new THREE.BufferGeometry()
-    edgeGeometry.setAttribute('position', new THREE.BufferAttribute(edgePositions, 3))
+    ensureEdgeCapacity(linkCount)
     edgeGeometry.setDrawRange(0, linkCount * 2)
-
-    var edgeMat = new THREE.LineBasicMaterial({
-      color: EDGE_COLOR,
-      transparent: true,
-      opacity: 0.5
-    })
-    edgeLine = new THREE.LineSegments(edgeGeometry, edgeMat)
-    scene.add(edgeLine)
 
     // Rebuild glow if a node was selected
     if (glowNodeId && graph.getNode(glowNodeId)) {
@@ -581,6 +635,16 @@ export default function create3DRenderer(graph, container) {
   }
   window.addEventListener('resize', onResize)
 
+  // Physics steps per animation frame, adapted to graph size. Small graphs are
+  // cheap to integrate, so run them hotter to settle within a second or two;
+  // large graphs keep the conservative rate to protect frame rate.
+  function layoutStepsPerFrame() {
+    var n = nodeIds.length
+    if (n < 150) return 4 * LAYOUT_STEPS_PER_FRAME
+    if (n < 500) return 2 * LAYOUT_STEPS_PER_FRAME
+    return LAYOUT_STEPS_PER_FRAME
+  }
+
   // Animation loop
   function animate() {
     if (disposed) return
@@ -591,7 +655,8 @@ export default function create3DRenderer(graph, container) {
     lastFrameTime = now
 
     if (layoutRunning) {
-      for (var i = 0; i < LAYOUT_STEPS_PER_FRAME; i++) {
+      var steps = layoutStepsPerFrame()
+      for (var i = 0; i < steps; i++) {
         layout.step()
       }
     }
@@ -632,11 +697,16 @@ export default function create3DRenderer(graph, container) {
       webglRenderer.domElement.removeEventListener('pointermove', onPointerMove)
       controls.dispose()
       if (instancedMesh) {
-        instancedMesh.material.dispose()
+        instancedMesh.dispose()
       }
-      if (edgeLine) {
+      if (sphereMat) {
+        sphereMat.dispose()
+      }
+      if (edgeGeometry) {
         edgeGeometry.dispose()
-        edgeLine.material.dispose()
+      }
+      if (edgeMat) {
+        edgeMat.dispose()
       }
       clearGlowEdges()
       sharedSphereGeo.dispose()

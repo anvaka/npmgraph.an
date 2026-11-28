@@ -68,6 +68,7 @@ const rendererLayoutRunning = ref(true)
 
 let renderer3d = null
 let layoutToggleCount = 0
+let activeGraphBuilder = null
 
 onMounted(() => {
   var graphBuilder
@@ -92,6 +93,7 @@ onMounted(() => {
 
   var g = markRaw(graphBuilder.graph)
   graph.value = g
+  activeGraphBuilder = graphBuilder
 
   import('../renderer3d.js').then(function (module) {
     if (!container.value) return
@@ -108,12 +110,17 @@ onMounted(() => {
 
     // Start graph building after renderer is ready
     graphBuilder.start().then(function () {
+      if (activeGraphBuilder !== graphBuilder) return // view was unmounted mid-build
       graphLoaded(graphBuilder.errors)
     })
   })
 })
 
 onUnmounted(() => {
+  if (activeGraphBuilder) {
+    activeGraphBuilder.cancel()
+    activeGraphBuilder = null
+  }
   if (renderer3d) {
     renderer3d.dispose()
     renderer3d = null
